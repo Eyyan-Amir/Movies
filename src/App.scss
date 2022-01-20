@@ -1,0 +1,23 @@
+.App {
+	background: lightgray;
+}
+
+form {
+	padding: 24px 0;
+	.form-group {
+		max-width: 290px;
+		margin: 0 auto;
+		position: relative;
+		input {
+			padding-right: 48px;
+		}
+		button {
+			position: absolute;
+			right: 0;
+			border: 0;
+			background: none;
+			top: 50%;
+			transform: translateY(-50%);
+		}
+	}
+}
