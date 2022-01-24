@@ -10,7 +10,6 @@
 @mixin truncate($lines, $lh: 1.2, $spacer: 0) {
 	line-height: $lh;
 	max-height: $lh * $lines + $spacer + em;
-	// overflow: hidden;
 	text-overflow: ellipsis;
 	text-overflow: -o-ellipsis-lastline;
 	display: -webkit-box;
@@ -69,17 +68,40 @@ form {
 		}
 		&--title {
 			margin-left: 8px;
-			h3 {
+			a {
 				text-align: left;
 				font-size: 14px;
 				font-weight: 500;
 				@include truncate(1);
 			}
+			i {
+				color: red;
+				.vote {
+					margin-left: 6px;
+					color: #000;
+				}
+			}
 		}
-		.textWrapper {
+		.text-wrapper {
 			display: flex;
 			align-items: center;
 			padding: 6px;
 		}
 	}
+}
+
+.movie-detail {
+	.detail {
+		margin-left: 16px;
+	}
+}
+.bold {
+	font-weight: 700;
+}
+
+.login-form {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	flex-direction: column;
 }
