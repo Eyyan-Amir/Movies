@@ -21,24 +21,8 @@ export default function Registration() {
 	) => {
 		setSubmitting(false);
 		resetForm();
-		// let inialValue = JSON.parse(localStorage.getItem("user"))
-		// 	? JSON.parse(localStorage.getItem("user"))
-		// 	: []
-		// 	setRecords(inialValue)
-		setRecords([
-			...records,
-			{
-				name: values.name,
-				email: values.email,
-				password: values.password,
-			},
-		]);
-		console.log(records);
-		// localStorage.setItem("users", JSON.stringify(records));
-
-		// localStorage.setItem("name", values.name);
-		// localStorage.setItem("email", values.email);
-		// localStorage.setItem("password", values.password);
+		setRecords([...records, values]);
+		localStorage.setItem("users", JSON.stringify(records));
 	};
 	return (
 		<>
@@ -57,7 +41,7 @@ export default function Registration() {
 					<Field type="password" name="password" placeholder="password"></Field>
 					<ErrorMessage name="password" component={TextError} />
 
-					<button>register</button>
+					<button type="submit">register</button>
 				</Form>
 			</Formik>
 		</>
