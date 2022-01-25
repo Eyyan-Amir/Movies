@@ -1,21 +1,7 @@
+// @import url("./style/Style.scss");
+
 .App {
 	background: lightgray;
-}
-@mixin truncate($truncation-boundary) {
-	max-width: $truncation-boundary;
-	white-space: nowrap;
-	overflow: hidden;
-	text-overflow: ellipsis;
-}
-@mixin truncate($lines, $lh: 1.2, $spacer: 0) {
-	line-height: $lh;
-	max-height: $lh * $lines + $spacer + em;
-	text-overflow: ellipsis;
-	text-overflow: -o-ellipsis-lastline;
-	display: -webkit-box;
-	-webkit-line-clamp: $lines;
-	-webkit-box-orient: vertical;
-	overflow: hidden;
 }
 form {
 	padding: 24px 0;
@@ -51,9 +37,9 @@ form {
 
 .list {
 	margin: 0 20px;
-	&__item {
+	.list-item {
 		background: #fff;
-		&--logo {
+		.list-item-logo {
 			width: 40px;
 			min-width: 40px;
 			height: 40px;
@@ -66,13 +52,13 @@ form {
 				object-position: top;
 			}
 		}
-		&--title {
+		.list-item-title {
 			margin-left: 8px;
 			a {
 				text-align: left;
 				font-size: 14px;
 				font-weight: 500;
-				@include truncate(1);
+				// @include truncate(1);
 			}
 			i {
 				color: red;

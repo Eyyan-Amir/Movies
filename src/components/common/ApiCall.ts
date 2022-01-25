@@ -5,10 +5,8 @@ export const ApiCall = () => {
 	axios
 		.get(`${process.env.REACT_APP_MOVIES_URL}`)
 		.then((response) => {
-			debugger;
 			movies = response.data.results;
 		})
 		.catch((err) => console.log(err));
-	debugger;
 	return movies;
 };

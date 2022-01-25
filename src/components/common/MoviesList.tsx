@@ -3,158 +3,92 @@ import { NextArrow, PrevArrow } from "../../utilis/Slider";
 import Slider from "react-slick";
 import axios from "axios";
 import { Link } from "react-router-dom";
-// import { ApiCall } from "./ApiCall";
+import GeneralSlider from "./GeneralSlider";
+import GenresSlider from "./GenresSlider";
 
-interface moviesType {
+interface ObjectType {
 	backdrop_path: string;
-	genre_ids: [number, number, number];
+	genre_ids: number[];
 	id: number;
 	poster_path: string;
 	title: string;
 	vote_count: number;
-	isLikebtn: boolean;
+	isLike: boolean;
 }
 
-interface genreType {
+interface GenreType {
+	movies: any[];
 	id: number;
 	name: string;
 }
 
 export default function MoviesList() {
 	const [movies, setMovies] = useState<any[]>([]);
-	const [genreMovie, setGenreMovie] = useState<genreType[]>([]);
+	const [genreMovie, setGenreMovie] = useState<any[]>([]);
+
 	useEffect(() => {
-		setMovies([
-			movies.map((movie, i) => {
-				return (movie.isLikebtn = false);
-			}),
-		]);
-		axios
-			.get(`${process.env.REACT_APP_MOVIES_URL}`)
-			.then((response) => {
-				setMovies(response.data.results);
-			})
-			.catch((err) => console.log(err));
+		let Addlike: object = movies.map((movie) => (movie.isLike = false));
+		setMovies([Addlike]);
+
+		const movieApi = axios.get(`${process.env.REACT_APP_MOVIES_URL}`);
+		const genresApi = axios.get(`${process.env.REACT_APP_GENRES_URL}`);
 
 		axios
-			.get(
-				`https://api.themoviedb.org/3/genre/list?api_key=4ce6fff0da52d2214a794776a6bba549`
-			)
-			.then((response) => {
-				setGenreMovie(response.data.genres);
+			.all([movieApi, genresApi])
+			.then((res) => {
+				setMovies(res[0].data.results);
+				let filteredGenres: object[] = [];
+				res[1].data.genres.map((m: GenreType) => {
+					m.movies = [];
+					res[0].data.results.forEach((movie: any) => {
+						if (movie.genre_ids.includes(m.id)) {
+							m.movies.push(movie);
+						}
+					});
+					filteredGenres.push(m);
+				});
+				setGenreMovie(filteredGenres);
 			})
-			.catch((err) => console.log(err));
+			.catch((errors) => {
+				console.error(errors);
+			});
 	}, []);
+
 	const handleLike = (item: object) => {
-		let newMovie = [...movies];
-		let index = newMovie.indexOf(item);
-		newMovie[index].isLikebtn = !movies[index].isLikebtn;
+		let index = movies.indexOf(item);
+		let movieEle = [...movies][index];
+		movieEle.isLike = !movies[index].isLike;
 
-		newMovie[index].isLikebtn
-			? (newMovie[index].vote_count = movies[index].vote_count + 1)
-			: (newMovie[index].vote_count = movies[index].vote_count - 1);
+		movieEle.isLike
+			? (movieEle.vote_count = movies[index].vote_count + 1)
+			: (movieEle.vote_count = movies[index].vote_count - 1);
 
-		setMovies(newMovie);
+		setMovies([...movies]);
 	};
 	return (
 		<div className="list">
 			<h1>All</h1>
-			<Slider {...settings}>
-				{movies.map((movie, i) => {
-					return (
-						<div className="list__item" key={movie.id}>
-							<div className="list__item--image">
-								<img
-									src={`${process.env.REACT_APP_MOVIES_IMG}${movie.backdrop_path}`}
-									alt=""
-									className="img-fluid"
-								/>
-							</div>
-							<div className="text-wrapper">
-								<div className="list__item--logo">
-									<img
-										src={`${process.env.REACT_APP_MOVIES_IMG}${movie.poster_path}`}
-										alt=""
-										className="img-fluid"
-									/>
-								</div>
-								<div className="list__item--title">
-									<Link to={`detail/${movie.id}`}>{movie.title}</Link>
+			<GeneralSlider
+				sliderSettings={{ ...sliderSettings }}
+				movies={movies}
+				handleLike={handleLike}
+			/>
 
-									<span className="d-block">
-										<i
-											className={`${movie.isLikebtn ? "fas" : "far"} fa-heart`}
-											onClick={() => {
-												handleLike(movie);
-											}}
-										>
-											<span className="vote">{movie.vote_count}</span>
-											<span className="vote">{movie.isLikebtn}</span>
-										</i>
-									</span>
-								</div>
-							</div>
-						</div>
-					);
-				})}
-			</Slider>
-			{genreMovie.map((movie, i) => {
-				return (
-					<div key={i}>
-						<h1 className="mt-5">{movie.name}</h1>
-						<Slider {...settings}>
-							{movies.map((movie) => {
-								return (
-									<div className="list__item" key={movie.id}>
-										<div className="list__item--image">
-											<img
-												src={`${process.env.REACT_APP_MOVIES_IMG}${movie.backdrop_path}`}
-												alt=""
-												className="img-fluid"
-											/>
-										</div>
-										<div className="text-wrapper">
-											<div className="list__item--logo">
-												<img
-													src={`${process.env.REACT_APP_MOVIES_IMG}${movie.poster_path}`}
-													alt=""
-													className="img-fluid"
-												/>
-											</div>
-											<div className="list__item--title">
-												<Link to={`detail/${movie.id}`}>{movie.title}</Link>
-												<span>
-													<i
-														className={`${
-															movie.isLikebtn ? "fas" : "far"
-														} fa-heart`}
-														onClick={() => {
-															handleLike(movie);
-														}}
-													>
-														<span className="vote">{movie.vote_count}</span>
-														<span className="vote">{movie.isLikebtn}</span>
-													</i>
-												</span>
-											</div>
-										</div>
-									</div>
-								);
-							})}
-						</Slider>
-					</div>
-				);
-			})}
+			<GenresSlider
+				sliderSettings={{ ...sliderSettings }}
+				movies={genreMovie}
+				handleLike={handleLike}
+			/>
 		</div>
 	);
 }
 
-const settings = {
+const sliderSettings = {
 	dots: false,
 	infinite: false,
 	speed: 500,
 	slidesToShow: 5,
-	slidesToScroll: 3,
+	slidesToScroll: 4,
 	spaceBetween: 20,
 	nextArrow: (
 		<NextArrow

@@ -1,22 +1,25 @@
 import { Form, Formik, Field, ErrorMessage } from "formik";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
 import * as yup from "yup";
 import TextError from "./common/TextError";
 
-interface registrationProps {
+interface RegistrationProps {
 	name: string;
 	email: string;
 	password: string;
 }
 export default function Registration() {
-	const [records, setRecords] = useState<any>([]);
-	let valideSchema = yup.object({
+	const [records, setRecords] = useState<Object[]>([]);
+
+	const initialValue: RegistrationProps = { name: "", email: "", password: "" };
+	let validationSchema = yup.object({
 		name: yup.string().required("Required"),
 		email: yup.string().email("invalid").required("Required"),
 		password: yup.string().required("Required"),
 	});
 	const handleSubmit = (
-		values: registrationProps,
+		values: RegistrationProps,
 		{ setSubmitting, resetForm }: any
 	) => {
 		setSubmitting(false);
@@ -27,9 +30,9 @@ export default function Registration() {
 	return (
 		<>
 			<Formik
-				initialValues={{ name: "", email: "", password: "" }}
+				initialValues={initialValue}
 				onSubmit={handleSubmit}
-				validationSchema={valideSchema}
+				validationSchema={validationSchema}
 			>
 				<Form className="login-form">
 					<h1>Registration Form</h1>
@@ -42,6 +45,7 @@ export default function Registration() {
 					<ErrorMessage name="password" component={TextError} />
 
 					<button type="submit">register</button>
+					<Link to={"/login"}>Sign In</Link>
 				</Form>
 			</Formik>
 		</>
