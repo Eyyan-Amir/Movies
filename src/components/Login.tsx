@@ -3,6 +3,7 @@ import TextError from "./common/TextError";
 import { Form, Formik, Field, ErrorMessage } from "formik";
 import * as yup from "yup";
 import { useNavigate, Link } from "react-router-dom";
+import FormikForm from "./common/FormkForm";
 
 interface CredentialType {
 	email: "";
@@ -11,7 +12,7 @@ interface CredentialType {
 export default function Login() {
 	const navigate = useNavigate();
 
-	const initialValues: CredentialType = { email: "", password: "" };
+	const initialValue: CredentialType = { email: "", password: "" };
 
 	let validationSchema = yup.object({
 		email: yup.string().email("invalid").required("Required"),
@@ -27,7 +28,9 @@ export default function Login() {
 		let user = users.find((u: CredentialType) => u.email === values.email);
 
 		if (user.password === values.password) {
-			navigate("/");
+			//@ts-ignore
+			// localStorage.setItem("comments", JSON.stringify([values.email]));
+			navigate("/home");
 		} else {
 			alert("in-valid credential");
 		}
@@ -36,7 +39,7 @@ export default function Login() {
 	return (
 		<>
 			<Formik
-				initialValues={initialValues}
+				initialValues={initialValue}
 				onSubmit={handleSubmit}
 				validationSchema={validationSchema}
 			>

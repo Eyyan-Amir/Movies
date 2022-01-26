@@ -24,7 +24,9 @@ export default function MovieDetail() {
 
 	const paramsId = params.id;
 
-	const [items, setItems] = useState<any[]>([]);
+	const [items, setItems] = useState<CommentProps[]>([]);
+
+	const [comment, setComment] = useState<CommentProps[]>([]);
 
 	const [detailMovie, setDetailMovie] = useState(movieDetail);
 
@@ -37,6 +39,8 @@ export default function MovieDetail() {
 				setDetailMovie(response.data);
 			})
 			.catch((err) => console.log(err));
+
+		let users = JSON.parse(localStorage.getItem("users") || "{}");
 	}, []);
 
 	const validationSchema = yup.object({
@@ -49,8 +53,13 @@ export default function MovieDetail() {
 	) => {
 		setSubmitting(false);
 		resetForm();
-		setItems([{ values }, ...items]);
+		setItems([...items, values]);
 	};
+	useEffect(() => {
+		localStorage.setItem("comments", JSON.stringify(items));
+		// let getComment = JSON.parse(localStorage.getItem("comments") || "{}");
+		// setComment(getComment);
+	}, [items]);
 	return (
 		<div className="movie-detail">
 			<div className="d-flex">
@@ -82,7 +91,6 @@ export default function MovieDetail() {
 			<div className="title">{detailMovie.title}</div>
 
 			<FormikForm
-				//@ts-ignore
 				initialValue={initialValue}
 				handleSubmit={handleSubmit}
 				validationSchema={validationSchema}
@@ -93,7 +101,7 @@ export default function MovieDetail() {
 			/>
 			<ul>
 				{items.map((item, i) => {
-					return <li key={i}>{item.values.comment}</li>;
+					return <li key={i}>{item.comment}</li>;
 				})}
 			</ul>
 		</div>

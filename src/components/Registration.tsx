@@ -1,6 +1,6 @@
 import { Form, Formik, Field, ErrorMessage } from "formik";
 import { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import * as yup from "yup";
 import TextError from "./common/TextError";
 
@@ -10,6 +10,7 @@ interface RegistrationProps {
 	password: string;
 }
 export default function Registration() {
+	const navigate = useNavigate();
 	const [records, setRecords] = useState<Object[]>([]);
 
 	const initialValue: RegistrationProps = { name: "", email: "", password: "" };
@@ -18,6 +19,11 @@ export default function Registration() {
 		email: yup.string().email("invalid").required("Required"),
 		password: yup.string().required("Required"),
 	});
+
+	useEffect(() => {
+		localStorage.setItem("users", JSON.stringify(records));
+	}, [records]);
+
 	const handleSubmit = (
 		values: RegistrationProps,
 		{ setSubmitting, resetForm }: any
@@ -25,8 +31,8 @@ export default function Registration() {
 		setSubmitting(false);
 		resetForm();
 		setRecords([...records, values]);
-		localStorage.setItem("users", JSON.stringify(records));
 	};
+
 	return (
 		<>
 			<Formik
@@ -45,7 +51,7 @@ export default function Registration() {
 					<ErrorMessage name="password" component={TextError} />
 
 					<button type="submit">register</button>
-					<Link to={"/login"}>Sign In</Link>
+					<Link to="/">Sign In</Link>
 				</Form>
 			</Formik>
 		</>

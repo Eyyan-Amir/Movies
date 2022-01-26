@@ -1,10 +1,11 @@
 import { useEffect, useState } from "react";
 import { NextArrow, PrevArrow } from "../../utilis/Slider";
-import Slider from "react-slick";
 import axios from "axios";
 import { Link } from "react-router-dom";
 import GeneralSlider from "./GeneralSlider";
 import GenresSlider from "./GenresSlider";
+
+import { Formik, Form, Field } from "formik";
 
 interface ObjectType {
 	backdrop_path: string;
@@ -22,9 +23,17 @@ interface GenreType {
 	name: string;
 }
 
+type searchtype = {
+	search: string;
+};
 export default function MoviesList() {
 	const [movies, setMovies] = useState<any[]>([]);
 	const [genreMovie, setGenreMovie] = useState<any[]>([]);
+	const [seacrhMovie, setSeacrhMovie] = useState<object[]>([]);
+	const [error, setError] = useState<boolean>(false);
+	const [onSearch, setOnSearch] = useState<boolean>(false);
+
+	const initialValue = { search: "" };
 
 	useEffect(() => {
 		let Addlike: object = movies.map((movie) => (movie.isLike = false));
@@ -37,6 +46,7 @@ export default function MoviesList() {
 			.all([movieApi, genresApi])
 			.then((res) => {
 				setMovies(res[0].data.results);
+				setSeacrhMovie(res[0].data.results);
 				let filteredGenres: object[] = [];
 				res[1].data.genres.map((m: GenreType) => {
 					m.movies = [];
@@ -65,21 +75,63 @@ export default function MoviesList() {
 
 		setMovies([...movies]);
 	};
-	return (
-		<div className="list">
-			<h1>All</h1>
-			<GeneralSlider
-				sliderSettings={{ ...sliderSettings }}
-				movies={movies}
-				handleLike={handleLike}
-			/>
 
-			<GenresSlider
-				sliderSettings={{ ...sliderSettings }}
-				movies={genreMovie}
-				handleLike={handleLike}
-			/>
-		</div>
+	const handleSearch = (
+		values: searchtype,
+		{ setSubmitting, resetForm }: any
+	) => {
+		setSubmitting(false);
+		resetForm();
+
+		let backUp = [];
+
+		if (values.search !== "") {
+			backUp = seacrhMovie.filter((v) => {
+				setOnSearch(true);
+				//@ts-ignore
+				return v.title.toLowerCase().includes(values.search.toLowerCase());
+			});
+		} else {
+			backUp = seacrhMovie;
+			setError(false);
+			setOnSearch(false);
+		}
+
+		setMovies(backUp);
+	};
+	return (
+		<>
+			<Formik initialValues={initialValue} onSubmit={handleSearch}>
+				<Form>
+					<div className="form-group">
+						<Field type="text" name="search" />
+						<button type="submit">
+							<i className="fal fa-search"></i>
+						</button>
+					</div>
+				</Form>
+			</Formik>
+			<Link className="logout" to="/">
+				Logout
+			</Link>
+
+			<div className="list">
+				<h1>All</h1>
+				{error && <h2>NO Record Found</h2>}
+				<GeneralSlider
+					sliderSettings={{ ...sliderSettings }}
+					movies={movies}
+					onSearch={onSearch}
+					handleLike={handleLike}
+				/>
+
+				<GenresSlider
+					sliderSettings={{ ...sliderSettings }}
+					movies={genreMovie}
+					handleLike={handleLike}
+				/>
+			</div>
+		</>
 	);
 }
 

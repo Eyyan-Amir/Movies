@@ -34,7 +34,7 @@ export default function GenresSlider({
 												/>
 											</div>
 											<div className="list-item-title">
-												<Link to={`detail/${item.id}`}>{item.title}</Link>
+												<Link to={`/detail/${item.id}`}>{item.title}</Link>
 												<span className="d-block">
 													<i
 														className={`${

@@ -5,13 +5,17 @@ export default function GeneralSlider({
 	sliderSettings,
 	handleLike,
 	movies,
+	onSearch,
 }: any) {
 	return (
 		<div>
 			<Slider {...sliderSettings}>
 				{movies.map((movie: any) => {
 					return (
-						<div className="list-item" key={movie.id}>
+						<div
+							className={onSearch ? "list-item on-search" : "list-item"}
+							key={movie.id}
+						>
 							<div className="list-item-image">
 								<img
 									src={`${process.env.REACT_APP_MOVIES_IMG}${movie.backdrop_path}`}
@@ -28,7 +32,7 @@ export default function GeneralSlider({
 									/>
 								</div>
 								<div className="list-item-title">
-									<Link to={`detail/${movie.id}`}>{movie.title}</Link>
+									<Link to={`/detail/${movie.id}`}>{movie.title}</Link>
 
 									<span className="d-block">
 										<i
