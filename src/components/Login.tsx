@@ -3,29 +3,28 @@ import TextError from "./common/TextError";
 import { Form, Formik, Field, ErrorMessage } from "formik";
 import * as yup from "yup";
 import { useNavigate, Link } from "react-router-dom";
-import FormikForm from "./common/FormkForm";
 
-interface CredentialType {
+interface LoginCredentialType {
 	email: "";
 	password: "";
 }
 export default function Login() {
 	const navigate = useNavigate();
 
-	const initialValue: CredentialType = { email: "", password: "" };
+	const initialValue: LoginCredentialType = { email: "", password: "" };
 
 	let validationSchema = yup.object({
 		email: yup.string().email("invalid").required("Required"),
 		password: yup.string().required("Required"),
 	});
 	const handleSubmit = (
-		values: CredentialType,
+		values: LoginCredentialType,
 		{ setSubmitting, resetForm }: any
 	) => {
 		setSubmitting(false);
 		resetForm();
 		let users = JSON.parse(localStorage.getItem("users") || "{}");
-		let user = users.find((u: CredentialType) => u.email === values.email);
+		let user = users.find((u: LoginCredentialType) => u.email === values.email);
 
 		if (user.password === values.password) {
 			//@ts-ignore

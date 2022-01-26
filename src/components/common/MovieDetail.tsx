@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import * as yup from "yup";
 import axios from "axios";
-import FormikForm from "./FormkForm";
+import CommentForm from "./CommentForm";
 
 interface CommentProps {
 	comment: "";
@@ -57,8 +57,6 @@ export default function MovieDetail() {
 	};
 	useEffect(() => {
 		localStorage.setItem("comments", JSON.stringify(items));
-		// let getComment = JSON.parse(localStorage.getItem("comments") || "{}");
-		// setComment(getComment);
 	}, [items]);
 	return (
 		<div className="movie-detail">
@@ -90,7 +88,7 @@ export default function MovieDetail() {
 			</div>
 			<div className="title">{detailMovie.title}</div>
 
-			<FormikForm
+			<CommentForm
 				initialValue={initialValue}
 				handleSubmit={handleSubmit}
 				validationSchema={validationSchema}

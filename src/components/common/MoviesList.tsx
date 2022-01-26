@@ -1,13 +1,13 @@
 import { useEffect, useState } from "react";
-import { NextArrow, PrevArrow } from "../../utilis/Slider";
+import { PrevArrow } from "../../components/slider/PrevArrow";
+import { NextArrow } from "../../components/slider/NextArrow";
 import axios from "axios";
 import { Link } from "react-router-dom";
-import GeneralSlider from "./GeneralSlider";
+import MoviesSlider from "./MoviesSlider";
 import GenresSlider from "./GenresSlider";
-
 import { Formik, Form, Field } from "formik";
 
-interface ObjectType {
+interface MovieType {
 	backdrop_path: string;
 	genre_ids: number[];
 	id: number;
@@ -18,27 +18,31 @@ interface ObjectType {
 }
 
 interface GenreType {
-	movies: any[];
+	movies: object[];
 	id: number;
 	name: string;
+}
+
+interface SearchMovieType {
+	title: string;
 }
 
 type searchtype = {
 	search: string;
 };
 export default function MoviesList() {
-	const [movies, setMovies] = useState<any[]>([]);
-	const [genreMovie, setGenreMovie] = useState<any[]>([]);
-	const [seacrhMovie, setSeacrhMovie] = useState<object[]>([]);
-	const [error, setError] = useState<boolean>(false);
-	const [onSearch, setOnSearch] = useState<boolean>(false);
+	const [movies, setMovies] = useState<MovieType[]>([]);
+	const [genreMovie, setGenreMovie] = useState<GenreType[]>([]);
+	const [seacrhMovie, setSeacrhMovie] = useState<SearchMovieType[]>([]);
 
 	const initialValue = { search: "" };
 
-	useEffect(() => {
-		let Addlike: object = movies.map((movie) => (movie.isLike = false));
+	const addLikeBtn = () => {
+		let Addlike: any = movies.map((movie) => (movie.isLike = false));
 		setMovies([Addlike]);
+	};
 
+	const callMovieApi = () => {
 		const movieApi = axios.get(`${process.env.REACT_APP_MOVIES_URL}`);
 		const genresApi = axios.get(`${process.env.REACT_APP_GENRES_URL}`);
 
@@ -47,10 +51,10 @@ export default function MoviesList() {
 			.then((res) => {
 				setMovies(res[0].data.results);
 				setSeacrhMovie(res[0].data.results);
-				let filteredGenres: object[] = [];
+				let filteredGenres: GenreType[] = [];
 				res[1].data.genres.map((m: GenreType) => {
 					m.movies = [];
-					res[0].data.results.forEach((movie: any) => {
+					res[0].data.results.forEach((movie: MovieType) => {
 						if (movie.genre_ids.includes(m.id)) {
 							m.movies.push(movie);
 						}
@@ -62,16 +66,16 @@ export default function MoviesList() {
 			.catch((errors) => {
 				console.error(errors);
 			});
-	}, []);
+	};
 
-	const handleLike = (item: object) => {
+	const handleLike = (item: MovieType) => {
 		let index = movies.indexOf(item);
-		let movieEle = [...movies][index];
-		movieEle.isLike = !movies[index].isLike;
+		let movie = [...movies][index];
+		movie.isLike = !movies[index].isLike;
 
-		movieEle.isLike
-			? (movieEle.vote_count = movies[index].vote_count + 1)
-			: (movieEle.vote_count = movies[index].vote_count - 1);
+		movie.isLike
+			? (movie.vote_count = movies[index].vote_count + 1)
+			: (movie.vote_count = movies[index].vote_count - 1);
 
 		setMovies([...movies]);
 	};
@@ -83,22 +87,23 @@ export default function MoviesList() {
 		setSubmitting(false);
 		resetForm();
 
-		let backUp = [];
+		let backUp: any = [];
 
 		if (values.search !== "") {
-			backUp = seacrhMovie.filter((v) => {
-				setOnSearch(true);
-				//@ts-ignore
+			backUp = seacrhMovie.filter((v: SearchMovieType) => {
 				return v.title.toLowerCase().includes(values.search.toLowerCase());
 			});
 		} else {
 			backUp = seacrhMovie;
-			setError(false);
-			setOnSearch(false);
 		}
-
 		setMovies(backUp);
 	};
+
+	useEffect(() => {
+		addLikeBtn();
+		callMovieApi();
+	}, []);
+
 	return (
 		<>
 			<Formik initialValues={initialValue} onSubmit={handleSearch}>
@@ -117,11 +122,9 @@ export default function MoviesList() {
 
 			<div className="list">
 				<h1>All</h1>
-				{error && <h2>NO Record Found</h2>}
-				<GeneralSlider
+				<MoviesSlider
 					sliderSettings={{ ...sliderSettings }}
 					movies={movies}
-					onSearch={onSearch}
 					handleLike={handleLike}
 				/>
 
@@ -140,18 +143,7 @@ const sliderSettings = {
 	infinite: false,
 	speed: 500,
 	slidesToShow: 5,
-	slidesToScroll: 4,
-	spaceBetween: 20,
-	nextArrow: (
-		<NextArrow
-			className="slick-arrow slick-next slick-disabled"
-			style={{ display: "block", right: "0px" }}
-		/>
-	),
-	prevArrow: (
-		<PrevArrow
-			className="slick-prev slick-next slick-disabled"
-			style={{ display: "block", left: "0px", zIndex: 1 }}
-		/>
-	),
+	slidesToScroll: 5,
+	nextArrow: <NextArrow className="slick-arrow slick-next slick-disabled" />,
+	prevArrow: <PrevArrow className="slick-prev slick-next slick-disabled" />,
 };

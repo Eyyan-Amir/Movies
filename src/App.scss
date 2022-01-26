@@ -1,4 +1,4 @@
-// @import url("./style/Style.scss");
+@import "./style/mixin.scss";
 
 .App {
 	background: lightgray;
@@ -33,6 +33,13 @@ form {
 	.slick-list {
 		margin: 0 -10px;
 	}
+	.slick-next {
+		right: 0;
+	}
+	.slick-prev {
+		left: 0;
+		z-index: 1;
+	}
 }
 
 .list {
@@ -58,7 +65,7 @@ form {
 				text-align: left;
 				font-size: 14px;
 				font-weight: 500;
-				// @include truncate(1);
+				@include truncate(1);
 			}
 			i {
 				color: red;
