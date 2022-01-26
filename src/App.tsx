@@ -1,9 +1,9 @@
-import Index from "./components/Index";
+import Routing from "./components/Routing";
 
 function App() {
 	return (
 		<div className="App">
-			<Index />
+			<Routing />
 		</div>
 	);
 }

@@ -4,7 +4,6 @@ import { NextArrow } from "../../components/slider/NextArrow";
 import axios from "axios";
 import MoviesSlider from "./MoviesSlider";
 import GenresSlider from "./GenresSlider";
-import { Formik, Form, Field } from "formik";
 
 interface MovieType {
 	backdrop_path: string;
@@ -13,7 +12,7 @@ interface MovieType {
 	poster_path: string;
 	title: string;
 	vote_count: number;
-	isLike: boolean;
+	isLiked: boolean;
 }
 
 interface GenreType {
@@ -22,21 +21,12 @@ interface GenreType {
 	name: string;
 }
 
-interface SearchMovieType {
-	title: string;
-}
-
-type searchtype = {
-	search: string;
-};
 export default function MoviesList() {
 	const [movies, setMovies] = useState<MovieType[]>([]);
 	const [genreMovie, setGenreMovie] = useState<GenreType[]>([]);
 
-	const initialValue = { search: "" };
-
-	const addLikeBtn = () => {
-		let Addlike: any = movies.map((movie) => (movie.isLike = false));
+	const addLikeKey = () => {
+		let Addlike: any = movies.map((movie) => (movie.isLiked = false));
 		setMovies([Addlike]);
 	};
 
@@ -68,9 +58,9 @@ export default function MoviesList() {
 	const handleLike = (item: MovieType) => {
 		let index = movies.indexOf(item);
 		let movie = [...movies][index];
-		movie.isLike = !movies[index].isLike;
+		movie.isLiked = !movies[index].isLiked;
 
-		movie.isLike
+		movie.isLiked
 			? (movie.vote_count = movies[index].vote_count + 1)
 			: (movie.vote_count = movies[index].vote_count - 1);
 
@@ -78,7 +68,7 @@ export default function MoviesList() {
 	};
 
 	useEffect(() => {
-		addLikeBtn();
+		addLikeKey();
 		callMovieApi();
 	}, []);
 

@@ -1,4 +1,4 @@
-@import "./style/mixin.scss";
+@import "./style/mixins.scss";
 
 .App {
 	background: lightgray;
@@ -42,6 +42,9 @@ form {
 	}
 }
 
+.error {
+	color: red;
+}
 .list {
 	margin: 0 20px;
 	.list-item {
@@ -105,8 +108,8 @@ form {
 	right: 75px;
 }
 
-.searchMovies {
-	.searchMovies-item {
+.search-movies {
+	.search-movies-item {
 		display: flex;
 		align-items: flex-start;
 		padding: 2rem;
@@ -121,11 +124,11 @@ form {
 			}
 		}
 	}
-	.searchMovies-item-image {
+	.search-movies-item-image {
 		flex: 0 0 500px;
 		max-width: 500px;
 	}
-	.searchMovies-item-title a {
+	.search-movies-item-title a {
 		font-size: 2rem;
 		text-decoration: none;
 		color: #000;
@@ -133,7 +136,7 @@ form {
 			opacity: 0.6;
 		}
 	}
-	.searchMovies-item-logo {
+	.search-movies-item-logo {
 		width: 60px;
 		min-width: 60px;
 		height: 60px;

@@ -1,5 +1,4 @@
-import { useState } from "react";
-import TextError from "./common/TextError";
+import TextError from "./common/ErrorText";
 import { Form, Formik, Field, ErrorMessage } from "formik";
 import * as yup from "yup";
 import { useNavigate, Link } from "react-router-dom";
@@ -27,8 +26,6 @@ export default function Login() {
 		let user = users.find((u: LoginCredentialType) => u.email === values.email);
 
 		if (user.password === values.password) {
-			//@ts-ignore
-			// localStorage.setItem("comments", JSON.stringify([values.email]));
 			navigate("/home");
 		} else {
 			alert("in-valid credential");

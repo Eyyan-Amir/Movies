@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { Link, useParams } from "react-router-dom";
-import { SearchInput } from "../SearchInput";
+import { SearchBar } from "../SearchBar";
 
-interface SearchMovieProps {
+interface SearchResult {
 	backdrop_path: string;
 	id: number;
 	poster_path: string;
@@ -13,25 +13,25 @@ interface SearchMovieProps {
 	overview: string;
 }
 export default function MovieSearch() {
-	const params = useParams();
-	const paramsName = params.name;
-	const [serachMovie, setSearchMovie] = useState<string | any>(paramsName);
-	const [movies, setMovies] = useState<SearchMovieProps[]>([]);
+	const { name } = useParams();
+	const [serachMovie, setSearchMovie] = useState<string | any>(name);
+	const [movies, setMovies] = useState<SearchResult[]>([]);
+
 	useEffect(() => {
-		setSearchMovie(paramsName);
+		setSearchMovie(name);
 		axios
 			.get(`${process.env.REACT_APP_SEARCH_MOVIE}${serachMovie}`)
 			.then((response) => setMovies(response.data.results))
 			.catch((err) => console.log(err));
 	}, [movies]);
+
 	return (
 		<>
-			<SearchInput />
-
-			<div className="searchMovies">
-				{movies.map((movie: SearchMovieProps) => (
-					<div className="searchMovies-item" key={movie.id}>
-						<div className="searchMovies-item-image">
+			<SearchBar />
+			<div className="search-movies">
+				{movies.map((movie: SearchResult) => (
+					<div className="search-movies-item" key={movie.id}>
+						<div className="search-movies-item-image">
 							<img
 								src={`${process.env.REACT_APP_MOVIES_IMG}${movie.backdrop_path}`}
 								alt=""
@@ -39,7 +39,7 @@ export default function MovieSearch() {
 							/>
 						</div>
 						<div className="text-wrapper">
-							<div className="searchMovies-item-title">
+							<div className="search-movies-item-title">
 								<Link to={`/detail/${movie.id}`}>{movie.title}</Link>
 							</div>
 							<div className="popularity">
@@ -47,7 +47,7 @@ export default function MovieSearch() {
 								<span>Release Date: {movie.release_date}</span>
 							</div>
 							<div className="d-flex align-items-center my-3">
-								<div className="searchMovies-item-logo">
+								<div className="search-movies-item-logo">
 									<img
 										src={`${process.env.REACT_APP_MOVIES_IMG}${movie.poster_path}`}
 										alt=""

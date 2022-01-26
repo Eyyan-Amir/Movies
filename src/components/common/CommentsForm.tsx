@@ -1,7 +1,17 @@
 import { Formik, Form, Field, ErrorMessage } from "formik";
-import TextError from "./TextError";
+import ErrorText from "./ErrorText";
 
-export default function FormikForm({
+interface CommentType {
+	initialValue: object;
+	handleSubmit: any;
+	validationSchema: object;
+	type: string;
+	control: string;
+	name: string;
+	placeHolder: string;
+}
+
+export default function CommentsForm({
 	initialValue,
 	handleSubmit,
 	validationSchema,
@@ -9,7 +19,7 @@ export default function FormikForm({
 	control,
 	name,
 	placeHolder,
-}: any) {
+}: CommentType) {
 	return (
 		<Formik
 			initialValues={initialValue}
@@ -24,7 +34,7 @@ export default function FormikForm({
 					placeholder={placeHolder}
 				></Field>
 				<button type="submit">Submit</button>
-				<ErrorMessage name={name} component={TextError} />
+				<ErrorMessage name={name} component={ErrorText} />
 			</Form>
 		</Formik>
 	);

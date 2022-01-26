@@ -1,17 +1,17 @@
 import { Formik, Form, Field } from "formik";
 import { Link, useNavigate } from "react-router-dom";
 
-type searchtype = {
+interface Searchtype {
 	search: string;
-};
+}
 
-export const SearchInput = () => {
+export const SearchBar = () => {
 	const navigate = useNavigate();
 
 	const initialValue = { search: "" };
 
 	const handleSearch = (
-		values: searchtype,
+		values: Searchtype,
 		{ setSubmitting, resetForm }: any
 	) => {
 		setSubmitting(false);

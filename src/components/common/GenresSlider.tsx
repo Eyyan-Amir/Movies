@@ -1,12 +1,17 @@
 import { Link } from "react-router-dom";
-
 import Slider from "react-slick";
+
+interface GenresSlider {
+	sliderSettings: any;
+	handleLike: any;
+	movies: object[];
+}
 
 export default function GenresSlider({
 	sliderSettings,
 	handleLike,
 	movies,
-}: any) {
+}: GenresSlider) {
 	return (
 		<div>
 			{movies.map((movie: any, i: number) => {

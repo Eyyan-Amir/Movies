@@ -2,9 +2,9 @@ import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import * as yup from "yup";
 import axios from "axios";
-import CommentForm from "./CommentForm";
+import CommentsForm from "./CommentsForm";
 
-interface CommentProps {
+interface CommentType {
 	comment: "";
 }
 
@@ -18,29 +18,24 @@ export default function MovieDetail() {
 		homepage: "",
 	};
 
-	const initialValue: CommentProps = { comment: "" };
+	const initialValue: CommentType = { comment: "" };
 
-	const params = useParams();
+	const { id } = useParams();
 
-	const paramsId = params.id;
-
-	const [items, setItems] = useState<CommentProps[]>([]);
-
-	const [comment, setComment] = useState<CommentProps[]>([]);
-
+	const [items, setItems] = useState<CommentType[]>([]);
 	const [detailMovie, setDetailMovie] = useState(movieDetail);
 
 	useEffect(() => {
 		axios
 			.get(
-				`https://api.themoviedb.org/3/movie/${paramsId}?api_key=4ce6fff0da52d2214a794776a6bba549&language=en-US`
+				`https://api.themoviedb.org/3/movie/${id}?api_key=4ce6fff0da52d2214a794776a6bba549&language=en-US`
 			)
 			.then((response) => {
 				setDetailMovie(response.data);
 			})
 			.catch((err) => console.log(err));
 
-		let users = JSON.parse(localStorage.getItem("users") || "{}");
+		JSON.parse(localStorage.getItem("users") || "{}");
 	}, []);
 
 	const validationSchema = yup.object({
@@ -48,13 +43,14 @@ export default function MovieDetail() {
 	});
 
 	const handleSubmit = (
-		values: CommentProps,
+		values: CommentType,
 		{ setSubmitting, resetForm }: any
 	) => {
 		setSubmitting(false);
 		resetForm();
 		setItems([...items, values]);
 	};
+
 	useEffect(() => {
 		localStorage.setItem("comments", JSON.stringify(items));
 	}, [items]);
@@ -63,7 +59,7 @@ export default function MovieDetail() {
 			<div className="d-flex">
 				<div className="image my-3">
 					<img
-						src={`https://image.tmdb.org/t/p/w500${detailMovie.backdrop_path}`}
+						src={`${process.env.REACT_APP_MOVIES_IMG}${detailMovie.backdrop_path}`}
 						alt=""
 						className="img-fluid h-100"
 					/>
@@ -88,7 +84,7 @@ export default function MovieDetail() {
 			</div>
 			<div className="title">{detailMovie.title}</div>
 
-			<CommentForm
+			<CommentsForm
 				initialValue={initialValue}
 				handleSubmit={handleSubmit}
 				validationSchema={validationSchema}

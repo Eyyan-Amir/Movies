@@ -1,11 +1,17 @@
 import { Link } from "react-router-dom";
 import Slider from "react-slick";
 
-export default function GeneralSlider({
+interface MoviesSlider {
+	sliderSettings: any;
+	handleLike: any;
+	movies: object[];
+}
+
+export default function MoviesSlider({
 	sliderSettings,
 	handleLike,
 	movies,
-}: any) {
+}: MoviesSlider) {
 	return (
 		<div>
 			<Slider {...sliderSettings}>

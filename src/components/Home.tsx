@@ -1,11 +1,11 @@
-import { SearchInput } from "./SearchInput";
+import { SearchBar } from "./SearchBar";
 import MoviesList from "./common/MoviesList";
-import "../App.scss";
+import "../app.scss";
 
 export default function Home() {
 	return (
 		<div>
-			<SearchInput />
+			<SearchBar />
 			<MoviesList />
 		</div>
 	);
