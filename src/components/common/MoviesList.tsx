@@ -2,7 +2,6 @@ import { useEffect, useState } from "react";
 import { PrevArrow } from "../../components/slider/PrevArrow";
 import { NextArrow } from "../../components/slider/NextArrow";
 import axios from "axios";
-import { Link } from "react-router-dom";
 import MoviesSlider from "./MoviesSlider";
 import GenresSlider from "./GenresSlider";
 import { Formik, Form, Field } from "formik";
@@ -33,7 +32,6 @@ type searchtype = {
 export default function MoviesList() {
 	const [movies, setMovies] = useState<MovieType[]>([]);
 	const [genreMovie, setGenreMovie] = useState<GenreType[]>([]);
-	const [seacrhMovie, setSeacrhMovie] = useState<SearchMovieType[]>([]);
 
 	const initialValue = { search: "" };
 
@@ -50,7 +48,6 @@ export default function MoviesList() {
 			.all([movieApi, genresApi])
 			.then((res) => {
 				setMovies(res[0].data.results);
-				setSeacrhMovie(res[0].data.results);
 				let filteredGenres: GenreType[] = [];
 				res[1].data.genres.map((m: GenreType) => {
 					m.movies = [];
@@ -80,25 +77,6 @@ export default function MoviesList() {
 		setMovies([...movies]);
 	};
 
-	const handleSearch = (
-		values: searchtype,
-		{ setSubmitting, resetForm }: any
-	) => {
-		setSubmitting(false);
-		resetForm();
-
-		let backUp: any = [];
-
-		if (values.search !== "") {
-			backUp = seacrhMovie.filter((v: SearchMovieType) => {
-				return v.title.toLowerCase().includes(values.search.toLowerCase());
-			});
-		} else {
-			backUp = seacrhMovie;
-		}
-		setMovies(backUp);
-	};
-
 	useEffect(() => {
 		addLikeBtn();
 		callMovieApi();
@@ -106,20 +84,6 @@ export default function MoviesList() {
 
 	return (
 		<>
-			<Formik initialValues={initialValue} onSubmit={handleSearch}>
-				<Form>
-					<div className="form-group">
-						<Field type="text" name="search" />
-						<button type="submit">
-							<i className="fal fa-search"></i>
-						</button>
-					</div>
-				</Form>
-			</Formik>
-			<Link className="logout" to="/">
-				Logout
-			</Link>
-
 			<div className="list">
 				<h1>All</h1>
 				<MoviesSlider

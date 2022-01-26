@@ -1,0 +1,17 @@
+@mixin truncate($truncation-boundary) {
+	max-width: $truncation-boundary;
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+}
+
+@mixin truncate($lines, $lh: 1.2, $spacer: 0) {
+	line-height: $lh;
+	max-height: $lh * $lines + $spacer + em;
+	text-overflow: ellipsis;
+	text-overflow: -o-ellipsis-lastline;
+	display: -webkit-box;
+	-webkit-line-clamp: $lines;
+	-webkit-box-orient: vertical;
+	overflow: hidden;
+}

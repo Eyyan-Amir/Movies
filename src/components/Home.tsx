@@ -5,7 +5,7 @@ import "../App.scss";
 export default function Home() {
 	return (
 		<div>
-			{/* <SearchInput /> */}
+			<SearchInput />
 			<MoviesList />
 		</div>
 	);
