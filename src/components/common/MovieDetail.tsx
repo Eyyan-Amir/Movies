@@ -56,6 +56,7 @@ export default function MovieDetail() {
 	useEffect(() => {
 		localStorage.setItem("comments", JSON.stringify(items));
 	}, [items]);
+
 	return (
 		<div className="movie-detail">
 			<div className="d-flex">

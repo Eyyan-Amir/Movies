@@ -51,6 +51,7 @@ export default function MoviesList() {
 				console.error(errors);
 			});
 	};
+
 	const callMovieApi = () => {
 		const movieApi = axios.get(`${process.env.REACT_APP_MOVIES_URL}`);
 		const genresApi = axios.get(`${process.env.REACT_APP_GENRES_URL}`);
