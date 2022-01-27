@@ -30,10 +30,7 @@ export default function MoviesList() {
 		setMovies([Addlike]);
 	};
 
-	const callMovieApi = () => {
-		const movieApi = axios.get(`${process.env.REACT_APP_MOVIES_URL}`);
-		const genresApi = axios.get(`${process.env.REACT_APP_GENRES_URL}`);
-
+	const filterMoviesIntoGenres = (movieApi: any, genresApi: any) => {
 		axios
 			.all([movieApi, genresApi])
 			.then((res) => {
@@ -53,6 +50,12 @@ export default function MoviesList() {
 			.catch((errors) => {
 				console.error(errors);
 			});
+	};
+	const callMovieApi = () => {
+		const movieApi = axios.get(`${process.env.REACT_APP_MOVIES_URL}`);
+		const genresApi = axios.get(`${process.env.REACT_APP_GENRES_URL}`);
+
+		filterMoviesIntoGenres(movieApi, genresApi);
 	};
 
 	const handleLike = (item: MovieType) => {

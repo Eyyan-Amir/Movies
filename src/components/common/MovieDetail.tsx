@@ -25,19 +25,6 @@ export default function MovieDetail() {
 	const [items, setItems] = useState<CommentType[]>([]);
 	const [detailMovie, setDetailMovie] = useState(movieDetail);
 
-	useEffect(() => {
-		axios
-			.get(
-				`https://api.themoviedb.org/3/movie/${id}?api_key=4ce6fff0da52d2214a794776a6bba549&language=en-US`
-			)
-			.then((response) => {
-				setDetailMovie(response.data);
-			})
-			.catch((err) => console.log(err));
-
-		JSON.parse(localStorage.getItem("users") || "{}");
-	}, []);
-
 	const validationSchema = yup.object({
 		comment: yup.string().required("required"),
 	});
@@ -50,6 +37,21 @@ export default function MovieDetail() {
 		resetForm();
 		setItems([...items, values]);
 	};
+
+	useEffect(() => {
+		let url = `${process.env.REACT_APP_DETAIL_MOVIE}`.replace(
+			"detail-movie",
+			`${id}`
+		);
+		axios
+			.get(url)
+			.then((response) => {
+				setDetailMovie(response.data);
+			})
+			.catch((err) => console.log(err));
+
+		JSON.parse(localStorage.getItem("users") || "{}");
+	}, []);
 
 	useEffect(() => {
 		localStorage.setItem("comments", JSON.stringify(items));
