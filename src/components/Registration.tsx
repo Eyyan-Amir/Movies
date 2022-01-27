@@ -4,15 +4,16 @@ import { Link } from "react-router-dom";
 import * as yup from "yup";
 import ErrorText from "./common/ErrorText";
 
-interface RegistrationProps {
+interface RegistrationType {
 	name: string;
 	email: string;
 	password: string;
 }
+
 export default function Registration() {
 	const [records, setRecords] = useState<Object[]>([]);
 
-	const initialValue: RegistrationProps = { name: "", email: "", password: "" };
+	const initialValue: RegistrationType = { name: "", email: "", password: "" };
 
 	let validationSchema = yup.object({
 		name: yup.string().required("Required"),
@@ -25,7 +26,7 @@ export default function Registration() {
 	}, [records]);
 
 	const handleSubmit = (
-		values: RegistrationProps,
+		values: RegistrationType,
 		{ setSubmitting, resetForm }: any
 	) => {
 		setSubmitting(false);

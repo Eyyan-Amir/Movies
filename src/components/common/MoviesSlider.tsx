@@ -1,17 +1,17 @@
 import { Link } from "react-router-dom";
 import Slider from "react-slick";
 
-interface MoviesSlider {
+interface MoviesSliderProps {
 	sliderSettings: any;
-	handleLike: any;
+	handleLikeClick: any;
 	movies: object[];
 }
 
 export default function MoviesSlider({
 	sliderSettings,
-	handleLike,
+	handleLikeClick,
 	movies,
-}: MoviesSlider) {
+}: MoviesSliderProps) {
 	return (
 		<div>
 			<Slider {...sliderSettings}>
@@ -39,7 +39,7 @@ export default function MoviesSlider({
 									<i
 										className={`${movie.isLike ? "fas" : "far"} fa-heart`}
 										onClick={() => {
-											handleLike(movie);
+											handleLikeClick(movie);
 										}}
 									>
 										<span className="vote">{movie.vote_count}</span>

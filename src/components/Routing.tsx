@@ -3,17 +3,17 @@ import Home from "./Home";
 import MovieDetail from "./common/MovieDetail";
 import Login from "./Login";
 import Registration from "./Registration";
-import MovieSearch from "./common/MovieSearch";
+import SearchResult from "./common/SearchResult";
 import "../app.scss";
 
-export default function Index() {
+export default function Routing() {
 	return (
 		<Routes>
 			<Route path="/" element={<Login />} />
 			<Route path="register" element={<Registration />} />
 			<Route path="home" element={<Home />} />
 			<Route path="detail/:id" element={<MovieDetail />} />
-			<Route path="home/search/:name" element={<MovieSearch />} />
+			<Route path="home/search/:name" element={<SearchResult />} />
 		</Routes>
 	);
 }

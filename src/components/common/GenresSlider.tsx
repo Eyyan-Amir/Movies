@@ -1,17 +1,17 @@
 import { Link } from "react-router-dom";
 import Slider from "react-slick";
 
-interface GenresSlider {
+interface GenresSliderProps {
 	sliderSettings: any;
-	handleLike: any;
+	handleLikeClick: any;
 	movies: object[];
 }
 
 export default function GenresSlider({
 	sliderSettings,
-	handleLike,
+	handleLikeClick,
 	movies,
-}: GenresSlider) {
+}: GenresSliderProps) {
 	return (
 		<div>
 			{movies.map((movie: any, i: number) => {
@@ -46,7 +46,7 @@ export default function GenresSlider({
 															item.isLike ? "fas" : "far"
 														} fa-heart`}
 														onClick={() => {
-															handleLike(item);
+															handleLikeClick(item);
 														}}
 													>
 														<span className="vote">{item.vote_count}</span>

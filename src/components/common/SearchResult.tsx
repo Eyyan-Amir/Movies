@@ -3,7 +3,7 @@ import axios from "axios";
 import { Link, useParams } from "react-router-dom";
 import { SearchBar } from "../SearchBar";
 
-interface SearchResult {
+interface SearchResultType {
 	backdrop_path: string;
 	id: number;
 	poster_path: string;
@@ -12,10 +12,11 @@ interface SearchResult {
 	release_date: string;
 	overview: string;
 }
-export default function MovieSearch() {
+
+export default function SearchResult() {
 	const { name } = useParams();
 	const [serachMovie, setSearchMovie] = useState<string | any>(name);
-	const [movies, setMovies] = useState<SearchResult[]>([]);
+	const [movies, setMovies] = useState<SearchResultType[]>([]);
 
 	useEffect(() => {
 		setSearchMovie(name);
@@ -28,8 +29,10 @@ export default function MovieSearch() {
 	return (
 		<>
 			<SearchBar />
+			<Link to={"/home"}>back</Link>
+
 			<div className="search-movies">
-				{movies.map((movie: SearchResult) => (
+				{movies.map((movie: SearchResultType) => (
 					<div className="search-movies-item" key={movie.id}>
 						<div className="search-movies-item-image">
 							<img
@@ -60,7 +63,6 @@ export default function MovieSearch() {
 						</div>
 					</div>
 				))}
-				<Link to={"/home"}>back</Link>
 			</div>
 		</>
 	);

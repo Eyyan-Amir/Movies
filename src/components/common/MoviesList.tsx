@@ -59,7 +59,7 @@ export default function MoviesList() {
 		filterMoviesIntoGenres(movieApi, genresApi);
 	};
 
-	const handleLike = (item: MovieType) => {
+	const handleLikeClick = (item: MovieType) => {
 		let index = movies.indexOf(item);
 		let movie = [...movies][index];
 		movie.isLiked = !movies[index].isLiked;
@@ -83,13 +83,13 @@ export default function MoviesList() {
 				<MoviesSlider
 					sliderSettings={{ ...sliderSettings }}
 					movies={movies}
-					handleLike={handleLike}
+					handleLikeClick={handleLikeClick}
 				/>
 
 				<GenresSlider
 					sliderSettings={{ ...sliderSettings }}
 					movies={genreMovie}
-					handleLike={handleLike}
+					handleLikeClick={handleLikeClick}
 				/>
 			</div>
 		</>

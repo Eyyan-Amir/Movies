@@ -9,7 +9,7 @@ interface CommentType {
 }
 
 export default function MovieDetail() {
-	let movieDetail = {
+	const movieDetail = {
 		title: "",
 		backdrop_path: "",
 		overview: "",

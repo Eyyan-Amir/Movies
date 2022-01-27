@@ -7,12 +7,13 @@ interface LoginCredentialType {
 	email: "";
 	password: "";
 }
+
 export default function Login() {
 	const navigate = useNavigate();
 
 	const initialValue: LoginCredentialType = { email: "", password: "" };
 
-	let validationSchema = yup.object({
+	const validationSchema = yup.object({
 		email: yup.string().email("invalid").required("Required"),
 		password: yup.string().required("Required"),
 	});
