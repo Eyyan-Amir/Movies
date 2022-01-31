@@ -5,7 +5,7 @@ import axios from "axios";
 import { Link } from "react-router-dom";
 import CommentsForm from "./CommentsForm";
 import { useSelector, useDispatch } from "react-redux";
-import { setMovieDetail, addComments } from "../../action/action";
+import { setMovieDetail, addComment } from "../../redux/action/action";
 
 interface CommentType {
 	comment: "";
@@ -16,12 +16,7 @@ export default function MovieDetail() {
 
 	const { id } = useParams();
 
-	const { detailMovie, items } = useSelector(
-		(
-			state
-			//@ts-ignore
-		) => state.movie
-	);
+	const { detailMovie, items }: any = useSelector<any>((state) => state.movie);
 
 	const dispatch = useDispatch();
 
@@ -35,7 +30,7 @@ export default function MovieDetail() {
 	) => {
 		setSubmitting(false);
 		resetForm();
-		dispatch(addComments([...items, values]));
+		dispatch(addComment([...items, values]));
 	};
 
 	useEffect(() => {

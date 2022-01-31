@@ -1,11 +1,16 @@
-interface ActionType {
-	type: string;
-}
+import {
+	SET_MOVIE,
+	SET_GENRE,
+	SET_SEARCH_Result,
+	SET_MOVIE_DETAILS,
+	ADD_COMMENT,
+	SET_USER,
+} from "../constant/constants";
 
 const initialState = {
 	movies: [],
 	genreMovies: [],
-	searchMovies: [],
+	searchResult: [],
 	detailMovie: [],
 	items: [],
 	records: [],
@@ -13,32 +18,32 @@ const initialState = {
 
 export const moviesReducer = (state = initialState, { type, payload }: any) => {
 	switch (type) {
-		case "SET_MOVIE":
+		case SET_MOVIE:
 			return {
 				...state,
 				movies: payload,
 			};
-		case "SET_GENRE":
+		case SET_GENRE:
 			return {
 				...state,
 				genreMovies: payload,
 			};
-		case "SET_SEARCH_MOVIE":
+		case SET_SEARCH_Result:
 			return {
 				...state,
-				searchMovies: payload,
+				searchResult: payload,
 			};
-		case "SET_DETAIL_MOVIE":
+		case SET_MOVIE_DETAILS:
 			return {
 				...state,
 				detailMovie: payload,
 			};
-		case "ADD_COMMENTS":
+		case ADD_COMMENT:
 			return {
 				...state,
 				items: payload,
 			};
-		case "SET_REGISTRATION":
+		case SET_USER:
 			return {
 				...state,
 				records: payload,

@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 import * as yup from "yup";
 import ErrorText from "./common/ErrorText";
 import { useSelector, useDispatch } from "react-redux";
-import { setRegistration } from "../action/action";
+import { setUser } from "../redux/action/action";
 
 interface RegistrationType {
 	name: string;
@@ -39,7 +39,7 @@ export default function Registration() {
 	) => {
 		setSubmitting(false);
 		resetForm();
-		dispatch(setRegistration([...records, values]));
+		dispatch(setUser([...records, values]));
 	};
 
 	return (

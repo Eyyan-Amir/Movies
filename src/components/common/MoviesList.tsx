@@ -5,7 +5,7 @@ import axios from "axios";
 import MoviesSlider from "./MoviesSlider";
 import GenresSlider from "./GenresSlider";
 import { useSelector, useDispatch } from "react-redux";
-import { setMovies, setGenre } from "../../action/action";
+import { setMovies, setGenre } from "../../redux/action/action";
 
 interface MovieType {
 	backdrop_path: string;
