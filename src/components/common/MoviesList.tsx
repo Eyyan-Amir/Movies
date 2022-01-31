@@ -1,9 +1,11 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { PrevArrow } from "../../components/slider/PrevArrow";
 import { NextArrow } from "../../components/slider/NextArrow";
 import axios from "axios";
 import MoviesSlider from "./MoviesSlider";
 import GenresSlider from "./GenresSlider";
+import { useSelector, useDispatch } from "react-redux";
+import { setMovies, setGenre } from "../../action/action";
 
 interface MovieType {
 	backdrop_path: string;
@@ -22,19 +24,18 @@ interface GenreType {
 }
 
 export default function MoviesList() {
-	const [movies, setMovies] = useState<MovieType[]>([]);
-	const [genreMovie, setGenreMovie] = useState<GenreType[]>([]);
-
-	const addLikeKey = () => {
-		let Addlike: any = movies.map((movie) => (movie.isLiked = false));
-		setMovies([Addlike]);
-	};
+	//@ts-ignore
+	const { movies = [], genreMovies = [] } = useSelector(
+		//@ts-ignore
+		(state) => state.moviesReducer
+	);
+	const dispatch = useDispatch();
 
 	const filterMoviesIntoGenres = (movieApi: any, genresApi: any) => {
 		axios
 			.all([movieApi, genresApi])
 			.then((res) => {
-				setMovies(res[0].data.results);
+				dispatch(setMovies(res[0].data.results));
 				let filteredGenres: GenreType[] = [];
 				res[1].data.genres.map((m: GenreType) => {
 					m.movies = [];
@@ -45,7 +46,7 @@ export default function MoviesList() {
 					});
 					filteredGenres.push(m);
 				});
-				setGenreMovie(filteredGenres);
+				dispatch(setGenre(filteredGenres));
 			})
 			.catch((errors) => {
 				console.error(errors);
@@ -61,18 +62,19 @@ export default function MoviesList() {
 
 	const handleLikeClick = (item: MovieType) => {
 		let index = movies.indexOf(item);
-		let movie = [...movies][index];
-		movie.isLiked = !movies[index].isLiked;
+		let movie = movies[index];
+		movie.isLiked = !movie.isLiked;
 
 		movie.isLiked
-			? (movie.vote_count = movies[index].vote_count + 1)
-			: (movie.vote_count = movies[index].vote_count - 1);
+			? (movie.vote_count = movie.vote_count + 1)
+			: (movie.vote_count = movie.vote_count - 1);
 
-		setMovies([...movies]);
+		movies.splice(index, 1, movie);
+
+		dispatch(setMovies([...movies]));
 	};
 
 	useEffect(() => {
-		addLikeKey();
 		callMovieApi();
 	}, []);
 
@@ -88,7 +90,7 @@ export default function MoviesList() {
 
 				<GenresSlider
 					sliderSettings={{ ...sliderSettings }}
-					movies={genreMovie}
+					movies={genreMovies}
 					handleLikeClick={handleLikeClick}
 				/>
 			</div>

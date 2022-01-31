@@ -43,7 +43,7 @@ export default function GenresSlider({
 												<span className="d-block">
 													<i
 														className={`${
-															item.isLike ? "fas" : "far"
+															item.isLiked ? "fas" : "far"
 														} fa-heart`}
 														onClick={() => {
 															handleLikeClick(item);

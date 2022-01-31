@@ -1,8 +1,10 @@
-import { useState, useEffect } from "react";
+import { useEffect } from "react";
 import { useParams } from "react-router-dom";
 import * as yup from "yup";
 import axios from "axios";
 import CommentsForm from "./CommentsForm";
+import { useSelector, useDispatch } from "react-redux";
+import { setMovieDetail, addComments } from "../../action/action";
 
 interface CommentType {
 	comment: "";
@@ -22,8 +24,14 @@ export default function MovieDetail() {
 
 	const { id } = useParams();
 
-	const [items, setItems] = useState<CommentType[]>([]);
-	const [detailMovie, setDetailMovie] = useState(movieDetail);
+	const { detailMovie, items } = useSelector(
+		(
+			state
+			//@ts-ignore
+		) => state.moviesReducer
+	);
+
+	const dispatch = useDispatch();
 
 	const validationSchema = yup.object({
 		comment: yup.string().required("required"),
@@ -35,7 +43,7 @@ export default function MovieDetail() {
 	) => {
 		setSubmitting(false);
 		resetForm();
-		setItems([...items, values]);
+		dispatch(addComments([...items, values]));
 	};
 
 	useEffect(() => {
@@ -46,7 +54,7 @@ export default function MovieDetail() {
 		axios
 			.get(url)
 			.then((response) => {
-				setDetailMovie(response.data);
+				dispatch(setMovieDetail(response.data));
 			})
 			.catch((err) => console.log(err));
 
@@ -97,7 +105,7 @@ export default function MovieDetail() {
 				placeHolder="comments"
 			/>
 			<ul>
-				{items.map((item, i) => {
+				{items.map((item: any, i: number) => {
 					return <li key={i}>{item.comment}</li>;
 				})}
 			</ul>

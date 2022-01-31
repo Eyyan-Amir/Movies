@@ -1,7 +1,9 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import axios from "axios";
 import { Link, useParams } from "react-router-dom";
 import { SearchBar } from "../SearchBar";
+import { useSelector, useDispatch } from "react-redux";
+import { setSearchMovies } from "../../action/action";
 
 interface SearchResultType {
 	backdrop_path: string;
@@ -15,16 +17,20 @@ interface SearchResultType {
 
 export default function SearchResult() {
 	const { name } = useParams();
-	const [serachMovie, setSearchMovie] = useState<string | any>(name);
-	const [movies, setMovies] = useState<SearchResultType[]>([]);
+	const { searchMovies } = useSelector(
+		(state) =>
+			//@ts-ignore
+			state.moviesReducer
+	);
+
+	const dispatch = useDispatch();
 
 	useEffect(() => {
-		setSearchMovie(name);
 		axios
-			.get(`${process.env.REACT_APP_SEARCH_MOVIE}${serachMovie}`)
-			.then((response) => setMovies(response.data.results))
+			.get(`${process.env.REACT_APP_SEARCH_MOVIE}${name}`)
+			.then((response) => dispatch(setSearchMovies(response.data.results)))
 			.catch((err) => console.log(err));
-	}, [movies]);
+	}, [name]);
 
 	return (
 		<>
@@ -32,7 +38,7 @@ export default function SearchResult() {
 			<Link to={"/home"}>back</Link>
 
 			<div className="search-movies">
-				{movies.map((movie: SearchResultType) => (
+				{searchMovies.map((movie: SearchResultType) => (
 					<div className="search-movies-item" key={movie.id}>
 						<div className="search-movies-item-image">
 							<img
