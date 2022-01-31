@@ -27,7 +27,7 @@ export default function MoviesList() {
 	//@ts-ignore
 	const { movies = [], genreMovies = [] } = useSelector(
 		//@ts-ignore
-		(state) => state.moviesReducer
+		(state) => state.movie
 	);
 	const dispatch = useDispatch();
 

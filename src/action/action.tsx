@@ -34,3 +34,10 @@ export const addComments = (items: any) => {
 		payload: items,
 	};
 };
+
+export const setRegistration = (items: any) => {
+	return {
+		type: "SET_REGISTRATION",
+		payload: items,
+	};
+};

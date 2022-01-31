@@ -20,7 +20,7 @@ export default function SearchResult() {
 	const { searchMovies } = useSelector(
 		(state) =>
 			//@ts-ignore
-			state.moviesReducer
+			state.movie
 	);
 
 	const dispatch = useDispatch();

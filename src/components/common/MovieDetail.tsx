@@ -11,15 +11,6 @@ interface CommentType {
 }
 
 export default function MovieDetail() {
-	const movieDetail = {
-		title: "",
-		backdrop_path: "",
-		overview: "",
-		popularity: "",
-		budget: "",
-		homepage: "",
-	};
-
 	const initialValue: CommentType = { comment: "" };
 
 	const { id } = useParams();
@@ -28,7 +19,7 @@ export default function MovieDetail() {
 		(
 			state
 			//@ts-ignore
-		) => state.moviesReducer
+		) => state.movie
 	);
 
 	const dispatch = useDispatch();

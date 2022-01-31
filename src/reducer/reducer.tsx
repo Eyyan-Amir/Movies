@@ -8,6 +8,7 @@ const initialState = {
 	searchMovies: [],
 	detailMovie: [],
 	items: [],
+	records: [],
 };
 
 export const moviesReducer = (state = initialState, { type, payload }: any) => {
@@ -36,6 +37,11 @@ export const moviesReducer = (state = initialState, { type, payload }: any) => {
 			return {
 				...state,
 				items: payload,
+			};
+		case "SET_REGISTRATION":
+			return {
+				...state,
+				records: payload,
 			};
 
 		default:
