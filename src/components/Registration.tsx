@@ -1,8 +1,10 @@
 import { Form, Formik, Field, ErrorMessage } from "formik";
-import { useState, useEffect } from "react";
+import { useEffect } from "react";
 import { Link } from "react-router-dom";
 import * as yup from "yup";
 import ErrorText from "./common/ErrorText";
+import { useSelector, useDispatch } from "react-redux";
+import { setUser } from "../redux/action/action";
 
 interface RegistrationType {
 	name: string;
@@ -11,7 +13,13 @@ interface RegistrationType {
 }
 
 export default function Registration() {
-	const [records, setRecords] = useState<Object[]>([]);
+	const { users } = useSelector(
+		(state) =>
+			//@ts-ignore
+			state.movie
+	);
+
+	const dispatch = useDispatch();
 
 	const initialValue: RegistrationType = { name: "", email: "", password: "" };
 
@@ -22,8 +30,8 @@ export default function Registration() {
 	});
 
 	useEffect(() => {
-		localStorage.setItem("users", JSON.stringify(records));
-	}, [records]);
+		localStorage.setItem("users", JSON.stringify(users));
+	}, [users]);
 
 	const handleSubmit = (
 		values: RegistrationType,
@@ -31,7 +39,7 @@ export default function Registration() {
 	) => {
 		setSubmitting(false);
 		resetForm();
-		setRecords([...records, values]);
+		dispatch(setUser([...users, values]));
 	};
 
 	return (

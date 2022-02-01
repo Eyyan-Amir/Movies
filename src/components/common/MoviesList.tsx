@@ -1,9 +1,12 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { PrevArrow } from "../../components/slider/PrevArrow";
 import { NextArrow } from "../../components/slider/NextArrow";
 import axios from "axios";
 import MoviesSlider from "./MoviesSlider";
 import GenresSlider from "./GenresSlider";
+import { useSelector, useDispatch } from "react-redux";
+import { connect } from "react-redux";
+import { fetchMovies, fetchGenresMovies } from "../../redux/action/action";
 
 interface MovieType {
 	backdrop_path: string;
@@ -21,60 +24,33 @@ interface GenreType {
 	name: string;
 }
 
-export default function MoviesList() {
-	const [movies, setMovies] = useState<MovieType[]>([]);
-	const [genreMovie, setGenreMovie] = useState<GenreType[]>([]);
-
-	const addLikeKey = () => {
-		let Addlike: any = movies.map((movie) => (movie.isLiked = false));
-		setMovies([Addlike]);
-	};
-
-	const filterMoviesIntoGenres = (movieApi: any, genresApi: any) => {
-		axios
-			.all([movieApi, genresApi])
-			.then((res) => {
-				setMovies(res[0].data.results);
-				let filteredGenres: GenreType[] = [];
-				res[1].data.genres.map((m: GenreType) => {
-					m.movies = [];
-					res[0].data.results.forEach((movie: MovieType) => {
-						if (movie.genre_ids.includes(m.id)) {
-							m.movies.push(movie);
-						}
-					});
-					filteredGenres.push(m);
-				});
-				setGenreMovie(filteredGenres);
-			})
-			.catch((errors) => {
-				console.error(errors);
-			});
-	};
-
-	const callMovieApi = () => {
-		const movieApi = axios.get(`${process.env.REACT_APP_MOVIES_URL}`);
-		const genresApi = axios.get(`${process.env.REACT_APP_GENRES_URL}`);
-
-		filterMoviesIntoGenres(movieApi, genresApi);
-	};
+function MoviesList({ items }: any) {
+	//@ts-ignore
+	const { movies } = useSelector(
+		//@ts-ignore
+		(state) => state.movie
+	);
+	const dispatch = useDispatch();
 
 	const handleLikeClick = (item: MovieType) => {
 		let index = movies.indexOf(item);
-		let movie = [...movies][index];
-		movie.isLiked = !movies[index].isLiked;
+		let movie = movies[index];
+		movie.isLiked = !movie.isLiked;
 
 		movie.isLiked
-			? (movie.vote_count = movies[index].vote_count + 1)
-			: (movie.vote_count = movies[index].vote_count - 1);
+			? (movie.vote_count = movie.vote_count + 1)
+			: (movie.vote_count = movie.vote_count - 1);
 
-		setMovies([...movies]);
+		movies.splice(index, 1, movie);
 	};
 
 	useEffect(() => {
-		addLikeKey();
-		callMovieApi();
+		dispatch(fetchMovies());
 	}, []);
+
+	useEffect(() => {
+		dispatch(fetchGenresMovies(movies));
+	}, [items]);
 
 	return (
 		<>
@@ -88,13 +64,21 @@ export default function MoviesList() {
 
 				<GenresSlider
 					sliderSettings={{ ...sliderSettings }}
-					movies={genreMovie}
+					movies={items.genreMovies}
 					handleLikeClick={handleLikeClick}
 				/>
 			</div>
 		</>
 	);
 }
+
+const mapStateToProps = (state: any) => {
+	return {
+		items: state.movie,
+	};
+};
+
+export default connect(mapStateToProps)(MoviesList);
 
 const sliderSettings = {
 	dots: false,

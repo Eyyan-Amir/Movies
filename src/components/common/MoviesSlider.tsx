@@ -37,13 +37,12 @@ export default function MoviesSlider({
 
 								<span className="d-block">
 									<i
-										className={`${movie.isLike ? "fas" : "far"} fa-heart`}
+										className={`${movie.isLiked ? "fas" : "far"} fa-heart`}
 										onClick={() => {
 											handleLikeClick(movie);
 										}}
 									>
 										<span className="vote">{movie.vote_count}</span>
-										<span className="vote">{movie.isLike}</span>
 									</i>
 								</span>
 							</div>
