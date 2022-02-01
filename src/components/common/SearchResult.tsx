@@ -65,7 +65,9 @@ function SearchResult({ items }: any) {
 				) : (
 					<h2 className="text-center">
 						I tried so hard and got so far but in the end{" "}
-						<h1>Movie not found :(</h1>
+						<span className="d-block">
+							<b>Movie not found :(</b>
+						</span>
 					</h2>
 				)}
 			</div>
@@ -75,7 +77,7 @@ function SearchResult({ items }: any) {
 
 const mapStateToProps = (state: any) => {
 	return {
-		items: state.movie,
+		items: state.rootReducer.movie,
 	};
 };
 

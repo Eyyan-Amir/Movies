@@ -16,7 +16,7 @@ export default function Registration() {
 	const { users } = useSelector(
 		(state) =>
 			//@ts-ignore
-			state.movie
+			state.rootReducer.movie
 	);
 
 	const dispatch = useDispatch();

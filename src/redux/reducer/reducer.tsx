@@ -1,3 +1,5 @@
+import { createReducer, createAsyncThunk } from "@reduxjs/toolkit";
+
 import {
 	SET_MOVIE,
 	SET_GENRE,
@@ -53,3 +55,15 @@ export const moviesReducer = (state = initialState, { type, payload }: any) => {
 			return state;
 	}
 };
+
+export const fetchMovie = createAsyncThunk("fetchMovie", async () => {
+	let response = await fetch(`${process.env.REACT_APP_MOVIES_URL}`);
+	let result = await response.json();
+	return result;
+});
+
+// export const moviesReducer = createReducer(initialState, (builder) => {
+// 	builder.addCase(SET_MOVIE, (state, action) => {
+// 		// state.movies = action.payload;
+// 	});
+// });

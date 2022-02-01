@@ -14,9 +14,6 @@ export default function GenresSlider({
 	handleLikeClick,
 	movies,
 }: GenresSliderProps) {
-	useEffect(() => {
-		// dispatchEvent(setGenre())
-	});
 	return (
 		<div>
 			{movies.map((movie: any, i: number) => {

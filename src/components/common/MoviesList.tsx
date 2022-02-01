@@ -1,12 +1,12 @@
 import { useEffect } from "react";
 import { PrevArrow } from "../../components/slider/PrevArrow";
 import { NextArrow } from "../../components/slider/NextArrow";
-import axios from "axios";
 import MoviesSlider from "./MoviesSlider";
 import GenresSlider from "./GenresSlider";
 import { useSelector, useDispatch } from "react-redux";
 import { connect } from "react-redux";
 import { fetchMovies, fetchGenresMovies } from "../../redux/action/action";
+import { fetchMovie } from "../../redux/reducer/reducer";
 
 interface MovieType {
 	backdrop_path: string;
@@ -28,7 +28,7 @@ function MoviesList({ items }: any) {
 	//@ts-ignore
 	const { movies } = useSelector(
 		//@ts-ignore
-		(state) => state.movie
+		(state) => state.rootReducer.movie
 	);
 	const dispatch = useDispatch();
 
@@ -45,7 +45,7 @@ function MoviesList({ items }: any) {
 	};
 
 	useEffect(() => {
-		dispatch(fetchMovies());
+		dispatch(fetchMovie());
 	}, []);
 
 	useEffect(() => {
@@ -62,11 +62,11 @@ function MoviesList({ items }: any) {
 					handleLikeClick={handleLikeClick}
 				/>
 
-				<GenresSlider
+				{/* <GenresSlider
 					sliderSettings={{ ...sliderSettings }}
 					movies={items.genreMovies}
 					handleLikeClick={handleLikeClick}
-				/>
+				/> */}
 			</div>
 		</>
 	);
@@ -74,7 +74,7 @@ function MoviesList({ items }: any) {
 
 const mapStateToProps = (state: any) => {
 	return {
-		items: state.movie,
+		items: state.rootReducer.movie,
 	};
 };
 

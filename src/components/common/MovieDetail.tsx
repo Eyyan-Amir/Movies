@@ -111,7 +111,7 @@ function MovieDetail({ items }: any) {
 
 const mapStateToProps = (state: any) => {
 	return {
-		items: state.movie,
+		items: state.rootReducer.movie,
 	};
 };
 
