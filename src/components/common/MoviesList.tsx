@@ -6,7 +6,7 @@ import GenresSlider from "./GenresSlider";
 import { useSelector, useDispatch } from "react-redux";
 import { connect } from "react-redux";
 import { fetchMovies, fetchGenresMovies } from "../../redux/action/action";
-import { fetchMovie } from "../../redux/reducer/reducer";
+// import { fetchMovie } from "../../redux/action/action";
 
 interface MovieType {
 	backdrop_path: string;
@@ -34,7 +34,8 @@ function MoviesList({ items }: any) {
 
 	const handleLikeClick = (item: MovieType) => {
 		let index = movies.indexOf(item);
-		let movie = movies[index];
+		let movie = [...movies][index];
+		// console.log(movie);
 		movie.isLiked = !movie.isLiked;
 
 		movie.isLiked
@@ -45,7 +46,7 @@ function MoviesList({ items }: any) {
 	};
 
 	useEffect(() => {
-		dispatch(fetchMovie());
+		dispatch(fetchMovies());
 	}, []);
 
 	useEffect(() => {
@@ -62,11 +63,11 @@ function MoviesList({ items }: any) {
 					handleLikeClick={handleLikeClick}
 				/>
 
-				{/* <GenresSlider
+				<GenresSlider
 					sliderSettings={{ ...sliderSettings }}
 					movies={items.genreMovies}
 					handleLikeClick={handleLikeClick}
-				/> */}
+				/>
 			</div>
 		</>
 	);

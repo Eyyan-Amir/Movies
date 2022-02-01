@@ -18,52 +18,23 @@ const initialState = {
 	users: [],
 };
 
-export const moviesReducer = (state = initialState, { type, payload }: any) => {
-	switch (type) {
-		case SET_MOVIE:
-			return {
-				...state,
-				movies: payload,
-			};
-		case SET_GENRE:
-			return {
-				...state,
-				genreMovies: payload,
-			};
-		case SET_SEARCH_Result:
-			return {
-				...state,
-				searchResult: payload,
-			};
-		case SET_MOVIE_DETAILS:
-			return {
-				...state,
-				detailMovie: payload,
-			};
-		case ADD_COMMENT:
-			return {
-				...state,
-				comment: payload,
-			};
-		case SET_USER:
-			return {
-				...state,
-				users: payload,
-			};
-
-		default:
-			return state;
-	}
-};
-
-export const fetchMovie = createAsyncThunk("fetchMovie", async () => {
-	let response = await fetch(`${process.env.REACT_APP_MOVIES_URL}`);
-	let result = await response.json();
-	return result;
+export const moviesReducer = createReducer(initialState, (builder) => {
+	builder.addCase(SET_MOVIE, (state, { payload }: any) => {
+		state.movies = payload;
+	});
+	builder.addCase(SET_GENRE, (state, { payload }: any) => {
+		state.genreMovies = payload;
+	});
+	builder.addCase(SET_SEARCH_Result, (state, { payload }: any) => {
+		state.searchResult = payload;
+	});
+	builder.addCase(SET_MOVIE_DETAILS, (state, { payload }: any) => {
+		state.detailMovie = payload;
+	});
+	builder.addCase(ADD_COMMENT, (state, { payload }: any) => {
+		state.comment = payload;
+	});
+	builder.addCase(SET_USER, (state, { payload }: any) => {
+		state.users = payload;
+	});
 });
-
-// export const moviesReducer = createReducer(initialState, (builder) => {
-// 	builder.addCase(SET_MOVIE, (state, action) => {
-// 		// state.movies = action.payload;
-// 	});
-// });
