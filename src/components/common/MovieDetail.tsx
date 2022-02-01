@@ -4,19 +4,18 @@ import * as yup from "yup";
 import axios from "axios";
 import { Link } from "react-router-dom";
 import CommentsForm from "./CommentsForm";
-import { useSelector, useDispatch } from "react-redux";
+import { useDispatch } from "react-redux";
+import { connect } from "react-redux";
 import { setMovieDetail, addComment } from "../../redux/action/action";
 
 interface CommentType {
 	comment: "";
 }
 
-export default function MovieDetail() {
+function MovieDetail({ items }: any) {
 	const initialValue: CommentType = { comment: "" };
 
 	const { id } = useParams();
-
-	const { detailMovie, items }: any = useSelector<any>((state) => state.movie);
 
 	const dispatch = useDispatch();
 
@@ -30,7 +29,9 @@ export default function MovieDetail() {
 	) => {
 		setSubmitting(false);
 		resetForm();
-		dispatch(addComment([...items, values]));
+		//@ts-ignore
+		console.log(items.comment);
+		dispatch(addComment([...items.comment, values]));
 	};
 
 	useEffect(() => {
@@ -49,8 +50,8 @@ export default function MovieDetail() {
 	}, []);
 
 	useEffect(() => {
-		localStorage.setItem("comments", JSON.stringify(items));
-	}, [items]);
+		localStorage.setItem("comments", JSON.stringify(items.comment));
+	}, [items.comment]);
 
 	return (
 		<>
@@ -60,31 +61,34 @@ export default function MovieDetail() {
 				<div className="d-flex">
 					<div className="image my-3">
 						<img
-							src={`${process.env.REACT_APP_MOVIES_IMG}${detailMovie.backdrop_path}`}
+							src={`${process.env.REACT_APP_MOVIES_IMG}${items.detailMovie.backdrop_path}`}
 							alt=""
 							className="img-fluid h-100"
 						/>
 					</div>
 					<div className="detail my-3">
 						<p>
-							<span className="bold">OverView :</span> {detailMovie.overview}
+							<span className="bold">OverView :</span>{" "}
+							{items.detailMovie.overview}
 						</p>
 						<p>
 							<span className="bold">popularity :</span>{" "}
-							{detailMovie.popularity}
+							{items.detailMovie.popularity}
 						</p>
 						<p>
-							<span className="bold">Budget :</span> {detailMovie.budget}
+							<span className="bold">Budget :</span> {items.detailMovie.budget}
 						</p>
-						{detailMovie.homepage && (
+						{items.detailMovie.homepage && (
 							<p>
 								<span className="bold">HomePage :</span>{" "}
-								<a href={detailMovie.homepage}>{detailMovie.homepage}</a>
+								<a href={items.detailMovie.homepage}>
+									{items.detailMovie.homepage}
+								</a>
 							</p>
 						)}
 					</div>
 				</div>
-				<div className="title">{detailMovie.title}</div>
+				<div className="title">{items.detailMovie.title}</div>
 
 				<CommentsForm
 					initialValue={initialValue}
@@ -96,7 +100,7 @@ export default function MovieDetail() {
 					placeHolder="comments"
 				/>
 				<ul>
-					{items.map((item: any, i: number) => {
+					{items.comment.map((item: any, i: number) => {
 						return <li key={i}>{item.comment}</li>;
 					})}
 				</ul>
@@ -104,3 +108,11 @@ export default function MovieDetail() {
 		</>
 	);
 }
+
+const mapStateToProps = (state: any) => {
+	return {
+		items: state.movie,
+	};
+};
+
+export default connect(mapStateToProps)(MovieDetail);

@@ -13,7 +13,7 @@ interface RegistrationType {
 }
 
 export default function Registration() {
-	const { records } = useSelector(
+	const { users } = useSelector(
 		(state) =>
 			//@ts-ignore
 			state.movie
@@ -30,8 +30,8 @@ export default function Registration() {
 	});
 
 	useEffect(() => {
-		localStorage.setItem("users", JSON.stringify(records));
-	}, [records]);
+		localStorage.setItem("users", JSON.stringify(users));
+	}, [users]);
 
 	const handleSubmit = (
 		values: RegistrationType,
@@ -39,7 +39,7 @@ export default function Registration() {
 	) => {
 		setSubmitting(false);
 		resetForm();
-		dispatch(setUser([...records, values]));
+		dispatch(setUser([...users, values]));
 	};
 
 	return (

@@ -5,7 +5,8 @@ import axios from "axios";
 import MoviesSlider from "./MoviesSlider";
 import GenresSlider from "./GenresSlider";
 import { useSelector, useDispatch } from "react-redux";
-import { setMovies, setGenre } from "../../redux/action/action";
+import { connect } from "react-redux";
+import { fetchMovies, fetchGenresMovies } from "../../redux/action/action";
 
 interface MovieType {
 	backdrop_path: string;
@@ -23,42 +24,13 @@ interface GenreType {
 	name: string;
 }
 
-export default function MoviesList() {
+function MoviesList({ items }: any) {
 	//@ts-ignore
-	const { movies = [], genreMovies = [] } = useSelector(
+	const { movies } = useSelector(
 		//@ts-ignore
 		(state) => state.movie
 	);
 	const dispatch = useDispatch();
-
-	const filterMoviesIntoGenres = (movieApi: any, genresApi: any) => {
-		axios
-			.all([movieApi, genresApi])
-			.then((res) => {
-				dispatch(setMovies(res[0].data.results));
-				let filteredGenres: GenreType[] = [];
-				res[1].data.genres.map((m: GenreType) => {
-					m.movies = [];
-					res[0].data.results.forEach((movie: MovieType) => {
-						if (movie.genre_ids.includes(m.id)) {
-							m.movies.push(movie);
-						}
-					});
-					filteredGenres.push(m);
-				});
-				dispatch(setGenre(filteredGenres));
-			})
-			.catch((errors) => {
-				console.error(errors);
-			});
-	};
-
-	const callMovieApi = () => {
-		const movieApi = axios.get(`${process.env.REACT_APP_MOVIES_URL}`);
-		const genresApi = axios.get(`${process.env.REACT_APP_GENRES_URL}`);
-
-		filterMoviesIntoGenres(movieApi, genresApi);
-	};
 
 	const handleLikeClick = (item: MovieType) => {
 		let index = movies.indexOf(item);
@@ -70,13 +42,15 @@ export default function MoviesList() {
 			: (movie.vote_count = movie.vote_count - 1);
 
 		movies.splice(index, 1, movie);
-
-		dispatch(setMovies([...movies]));
 	};
 
 	useEffect(() => {
-		callMovieApi();
+		dispatch(fetchMovies());
 	}, []);
+
+	useEffect(() => {
+		dispatch(fetchGenresMovies(movies));
+	}, [items]);
 
 	return (
 		<>
@@ -90,13 +64,21 @@ export default function MoviesList() {
 
 				<GenresSlider
 					sliderSettings={{ ...sliderSettings }}
-					movies={genreMovies}
+					movies={items.genreMovies}
 					handleLikeClick={handleLikeClick}
 				/>
 			</div>
 		</>
 	);
 }
+
+const mapStateToProps = (state: any) => {
+	return {
+		items: state.movie,
+	};
+};
+
+export default connect(mapStateToProps)(MoviesList);
 
 const sliderSettings = {
 	dots: false,

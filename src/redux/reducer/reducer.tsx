@@ -12,8 +12,8 @@ const initialState = {
 	genreMovies: [],
 	searchResult: [],
 	detailMovie: [],
-	items: [],
-	records: [],
+	comment: [],
+	users: [],
 };
 
 export const moviesReducer = (state = initialState, { type, payload }: any) => {
@@ -41,12 +41,12 @@ export const moviesReducer = (state = initialState, { type, payload }: any) => {
 		case ADD_COMMENT:
 			return {
 				...state,
-				items: payload,
+				comment: payload,
 			};
 		case SET_USER:
 			return {
 				...state,
-				records: payload,
+				users: payload,
 			};
 
 		default:

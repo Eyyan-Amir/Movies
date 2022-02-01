@@ -1,5 +1,7 @@
-import { Formik, Form, Field } from "formik";
+import { Formik, Form, Field, ErrorMessage } from "formik";
 import { Link, useNavigate } from "react-router-dom";
+import TextError from "./common/ErrorText";
+import * as yup from "yup";
 
 interface Searchtype {
 	search: string;
@@ -7,6 +9,10 @@ interface Searchtype {
 
 export const SearchBar = () => {
 	const navigate = useNavigate();
+
+	const validationSchema = yup.object({
+		search: yup.string().required("required"),
+	});
 
 	const initialValue = { search: "" };
 
@@ -20,7 +26,11 @@ export const SearchBar = () => {
 	};
 	return (
 		<>
-			<Formik initialValues={initialValue} onSubmit={handleSearch}>
+			<Formik
+				initialValues={initialValue}
+				onSubmit={handleSearch}
+				validationSchema={validationSchema}
+			>
 				<Form>
 					<div className="form-group">
 						<Field type="text" name="search" />
@@ -28,6 +38,7 @@ export const SearchBar = () => {
 							<i className="fal fa-search"></i>
 						</button>
 					</div>
+					<ErrorMessage name="search" component={TextError} />
 				</Form>
 			</Formik>
 			<Link className="logout" to="/">
