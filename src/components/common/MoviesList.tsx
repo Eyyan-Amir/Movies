@@ -1,3 +1,4 @@
+import React from "react";
 import { useEffect } from "react";
 import { PrevArrow } from "../../components/slider/PrevArrow";
 import { NextArrow } from "../../components/slider/NextArrow";
@@ -35,11 +36,6 @@ function MoviesList() {
 		let movie = [...movies][index];
 
 		movie.isLiked = !movie.isLiked;
-		if (movie.isLiked) {
-			console.log("true");
-		} else {
-			console.log("false");
-		}
 		movie.isLiked = !movie.isLiked;
 		console.log(movie.isLiked);
 

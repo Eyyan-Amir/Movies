@@ -1,3 +1,5 @@
+import React from "react";
+
 export const SET_MOVIE = "SET_MOVIE";
 
 export const SET_GENRE = "SET_GENRE";
