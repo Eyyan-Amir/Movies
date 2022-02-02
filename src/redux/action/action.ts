@@ -1,4 +1,4 @@
-import { createAction, createAsyncThunk } from "@reduxjs/toolkit";
+import { createAction } from "@reduxjs/toolkit";
 
 import {
 	SET_MOVIE,
@@ -34,15 +34,6 @@ export const setSearchResult = createAction(
 
 export const setMovieDetail = createAction(
 	SET_MOVIE_DETAILS,
-	(MovieDetail: any) => {
-		return {
-			payload: MovieDetail,
-		};
-	}
-);
-
-export const setcomment = createAction(
-	SET_SEARCH_Result,
 	(MovieDetail: any) => {
 		return {
 			payload: MovieDetail,

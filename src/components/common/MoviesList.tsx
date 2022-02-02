@@ -4,9 +4,11 @@ import { NextArrow } from "../../components/slider/NextArrow";
 import MoviesSlider from "./MoviesSlider";
 import GenresSlider from "./GenresSlider";
 import { useSelector, useDispatch } from "react-redux";
-import { connect } from "react-redux";
-import { fetchMovies, fetchGenresMovies } from "../../redux/action/action";
-// import { fetchMovie } from "../../redux/action/action";
+import {
+	getMovies,
+	getGenresMovies,
+	toggleIsLiked,
+} from "../../redux/reducer/reducer";
 
 interface MovieType {
 	backdrop_path: string;
@@ -18,40 +20,40 @@ interface MovieType {
 	isLiked: boolean;
 }
 
-interface GenreType {
-	movies: object[];
-	id: number;
-	name: string;
-}
-
-function MoviesList({ items }: any) {
-	//@ts-ignore
-	const { movies } = useSelector(
-		//@ts-ignore
-		(state) => state.rootReducer.movie
-	);
+function MoviesList() {
 	const dispatch = useDispatch();
+
+	const { movies, genreMovies } = useSelector(
+		(state) =>
+			//@ts-ignore
+			state.moviesReducer
+	);
+
+	// console.log("genreMovies", genreMovies);
 
 	const handleLikeClick = (item: MovieType) => {
 		let index = movies.indexOf(item);
+		// console.log(index);
 		let movie = [...movies][index];
+
+		movie.isLiked = !movies[index].isLiked;
 		// console.log(movie);
-		movie.isLiked = !movie.isLiked;
+		// movie.isLiked = !movie.isLiked;
+		// dispatch(toggleIsLiked(movie));
 
-		movie.isLiked
-			? (movie.vote_count = movie.vote_count + 1)
-			: (movie.vote_count = movie.vote_count - 1);
+		// movie.isLiked
+		// 	? (movie.vote_count = movie.vote_count + 1)
+		// 	: (movie.vote_count = movie.vote_count - 1);
 
-		movies.splice(index, 1, movie);
+		// movies.splice(index, 1, movie);
 	};
-
 	useEffect(() => {
-		dispatch(fetchMovies());
+		dispatch(getMovies());
 	}, []);
 
 	useEffect(() => {
-		dispatch(fetchGenresMovies(movies));
-	}, [items]);
+		dispatch(getGenresMovies({ movies }));
+	}, [movies]);
 
 	return (
 		<>
@@ -65,21 +67,13 @@ function MoviesList({ items }: any) {
 
 				<GenresSlider
 					sliderSettings={{ ...sliderSettings }}
-					movies={items.genreMovies}
+					movies={genreMovies}
 					handleLikeClick={handleLikeClick}
 				/>
 			</div>
 		</>
 	);
 }
-
-const mapStateToProps = (state: any) => {
-	return {
-		items: state.rootReducer.movie,
-	};
-};
-
-export default connect(mapStateToProps)(MoviesList);
 
 const sliderSettings = {
 	dots: false,
@@ -90,3 +84,5 @@ const sliderSettings = {
 	nextArrow: <NextArrow className="slick-arrow slick-next slick-disabled" />,
 	prevArrow: <PrevArrow className="slick-prev slick-next slick-disabled" />,
 };
+
+export default MoviesList;

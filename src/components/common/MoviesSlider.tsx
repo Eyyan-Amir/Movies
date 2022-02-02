@@ -15,7 +15,7 @@ export default function MoviesSlider({
 	return (
 		<div>
 			<Slider {...sliderSettings}>
-				{movies.map((movie: any, i: number) => (
+				{movies?.map((movie: any, i: number) => (
 					<div className="list-item" key={i}>
 						<div className="list-item-image">
 							<img

@@ -1,12 +1,19 @@
-import { useEffect } from "react";
 import { Link } from "react-router-dom";
 import Slider from "react-slick";
-import { setGenre } from "../../redux/action/action";
 
 interface GenresSliderProps {
 	sliderSettings: any;
 	handleLikeClick: any;
 	movies: object[];
+}
+
+interface GenresMovieType {
+	backdrop_path: string;
+	poster_path: string;
+	id: number;
+	title: string;
+	vote_count: number;
+	isLiked: boolean;
 }
 
 export default function GenresSlider({
@@ -16,13 +23,13 @@ export default function GenresSlider({
 }: GenresSliderProps) {
 	return (
 		<div>
-			{movies.map((movie: any, i: number) => {
+			{movies?.map((movie: any, i: number) => {
 				return (
 					<div key={i}>
 						<h1 className="mt-5">{movie.name}</h1>
 						<Slider {...sliderSettings}>
 							{movie.movies?.length &&
-								movie.movies?.map((item: any) => {
+								movie.movies?.map((item: GenresMovieType) => {
 									return (
 										<div className="list-item" key={item.id}>
 											<div className="list-item-image">
@@ -53,7 +60,6 @@ export default function GenresSlider({
 															}}
 														>
 															<span className="vote">{item.vote_count}</span>
-															<span className="vote">{item.isLike}</span>
 														</i>
 													</span>
 												</div>

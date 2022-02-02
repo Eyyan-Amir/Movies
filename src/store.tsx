@@ -5,6 +5,6 @@ import thunk from "redux-thunk";
 import { rootReducer } from "./redux/reducer";
 
 export const store = configureStore({
-	reducer: { rootReducer },
+	reducer: rootReducer,
 	middleware: [thunk],
 });

@@ -4,23 +4,31 @@ import * as yup from "yup";
 import axios from "axios";
 import { Link } from "react-router-dom";
 import CommentsForm from "./CommentsForm";
-import { useDispatch } from "react-redux";
-import { connect } from "react-redux";
-import { setMovieDetail, addComment } from "../../redux/action/action";
+import { useSelector, useDispatch } from "react-redux";
+import { setMovieDetail, addComment } from "../../redux/reducer/reducer";
 
 interface CommentType {
 	comment: "";
 }
 
-function MovieDetail({ items }: any) {
+function MovieDetail() {
 	const initialValue: CommentType = { comment: "" };
 
 	const { id } = useParams();
 
 	const dispatch = useDispatch();
 
+	const { MovieDetail, comment } = useSelector(
+		(state) =>
+			//@ts-ignore
+			state.moviesReducer
+	);
+
 	const validationSchema = yup.object({
-		comment: yup.string().required("required"),
+		comment: yup
+			.string()
+			.required("required")
+			.min(3, "minimum enter 3 letters"),
 	});
 
 	const handleSubmit = (
@@ -29,9 +37,7 @@ function MovieDetail({ items }: any) {
 	) => {
 		setSubmitting(false);
 		resetForm();
-		//@ts-ignore
-		console.log(items.comment);
-		dispatch(addComment([...items.comment, values]));
+		dispatch(addComment([...comment, values]));
 	};
 
 	useEffect(() => {
@@ -50,8 +56,8 @@ function MovieDetail({ items }: any) {
 	}, []);
 
 	useEffect(() => {
-		localStorage.setItem("comments", JSON.stringify(items.comment));
-	}, [items.comment]);
+		localStorage.setItem("comments", JSON.stringify(comment));
+	}, [comment]);
 
 	return (
 		<>
@@ -61,34 +67,31 @@ function MovieDetail({ items }: any) {
 				<div className="d-flex">
 					<div className="image my-3">
 						<img
-							src={`${process.env.REACT_APP_MOVIES_IMG}${items.detailMovie.backdrop_path}`}
+							src={`${process.env.REACT_APP_MOVIES_IMG}${MovieDetail.backdrop_path}`}
 							alt=""
 							className="img-fluid h-100"
 						/>
 					</div>
 					<div className="detail my-3">
 						<p>
-							<span className="bold">OverView :</span>{" "}
-							{items.detailMovie.overview}
+							<span className="bold">OverView :</span> {MovieDetail.overview}
 						</p>
 						<p>
 							<span className="bold">popularity :</span>{" "}
-							{items.detailMovie.popularity}
+							{MovieDetail.popularity}
 						</p>
 						<p>
-							<span className="bold">Budget :</span> {items.detailMovie.budget}
+							<span className="bold">Budget :</span> {MovieDetail.budget}
 						</p>
-						{items.detailMovie.homepage && (
+						{MovieDetail.homepage && (
 							<p>
 								<span className="bold">HomePage :</span>{" "}
-								<a href={items.detailMovie.homepage}>
-									{items.detailMovie.homepage}
-								</a>
+								<a href={MovieDetail.homepage}>{MovieDetail.homepage}</a>
 							</p>
 						)}
 					</div>
 				</div>
-				<div className="title">{items.detailMovie.title}</div>
+				<div className="title">{MovieDetail.title}</div>
 
 				<CommentsForm
 					initialValue={initialValue}
@@ -100,7 +103,7 @@ function MovieDetail({ items }: any) {
 					placeHolder="comments"
 				/>
 				<ul>
-					{items.comment.map((item: any, i: number) => {
+					{comment.map((item: CommentType, i: number) => {
 						return <li key={i}>{item.comment}</li>;
 					})}
 				</ul>
@@ -109,10 +112,4 @@ function MovieDetail({ items }: any) {
 	);
 }
 
-const mapStateToProps = (state: any) => {
-	return {
-		items: state.rootReducer.movie,
-	};
-};
-
-export default connect(mapStateToProps)(MovieDetail);
+export default MovieDetail;
