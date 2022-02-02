@@ -1,7 +1,16 @@
 import { createAsyncThunk, PayloadAction, createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
 
-const initialState = {
+interface initialStateType {
+	movies: [];
+	genreMovies: [];
+	searchResult: [];
+	MovieDetail: [];
+	comment: [];
+	users: [];
+}
+
+const initialState: initialStateType = {
 	movies: [],
 	genreMovies: [],
 	searchResult: [],
@@ -31,19 +40,23 @@ export const getMovies = createAsyncThunk(
 export const getGenresMovies = createAsyncThunk(
 	"getGenresMovies",
 	({ movies }: any, { dispatch }) => {
-		axios.get(`${process.env.REACT_APP_GENRES_URL}`).then((response) => {
-			let filterGenres: any = [];
-			response.data.genres.map((m: any) => {
-				m.movies = [];
-				movies?.forEach((movie: any) => {
-					if (movie.genre_ids.includes(m.id)) {
-						m.movies.push(movie);
-					}
+		axios
+			.get(`${process.env.REACT_APP_GENRES_URL}`)
+			.then((response) => {
+				let filterGenres: any = [];
+
+				response.data.genres.map((m: any) => {
+					m.movies = [];
+					movies?.forEach((movie: any) => {
+						if (movie.genre_ids.includes(m.id)) {
+							m.movies.push(movie);
+						}
+					});
+					filterGenres.push(m);
 				});
-				filterGenres.push(m);
-			});
-			dispatch(setGentresMovies([...filterGenres]));
-		});
+				dispatch(setGentresMovies([...filterGenres]));
+			})
+			.catch((err) => console.log(err));
 	}
 );
 
@@ -60,10 +73,10 @@ const moviesReducer = createSlice({
 	name: "movies",
 	initialState,
 	reducers: {
-		setMovieDetail(state, { payload }: any) {
+		setMovieDetail(state, { payload }: PayloadAction<any>) {
 			state.MovieDetail = payload;
 		},
-		addComment(state, { payload }: any) {
+		addComment(state, { payload }: PayloadAction<any>) {
 			state.comment = payload;
 		},
 		setUser(state, { payload }: PayloadAction<any>) {
@@ -77,7 +90,6 @@ const moviesReducer = createSlice({
 			state.genreMovies = payload;
 		},
 		toggleIsLiked(state, { payload }: PayloadAction<any>) {
-			// debugger;
 			state.movies = payload;
 		},
 	},
@@ -92,7 +104,6 @@ const moviesReducer = createSlice({
 		},
 		//@ts-ignore
 		[getSearchMovies.fulfilled]: (state, { payload }: any) => {
-			debugger;
 			state.searchResult = payload;
 		},
 	},

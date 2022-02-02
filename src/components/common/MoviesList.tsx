@@ -32,20 +32,27 @@ function MoviesList() {
 	// console.log("genreMovies", genreMovies);
 
 	const handleLikeClick = (item: MovieType) => {
+		let newMovies = [...movies];
 		let index = movies.indexOf(item);
 		// console.log(index);
 		let movie = [...movies][index];
 
-		movie.isLiked = !movies[index].isLiked;
-		// console.log(movie);
-		// movie.isLiked = !movie.isLiked;
-		// dispatch(toggleIsLiked(movie));
+		movie.isLiked = !movie.isLiked;
+		if (movie.isLiked) {
+			console.log("true");
+		} else {
+			console.log("false");
+		}
+		movie.isLiked = !movie.isLiked;
+		console.log(movie.isLiked);
 
-		// movie.isLiked
-		// 	? (movie.vote_count = movie.vote_count + 1)
-		// 	: (movie.vote_count = movie.vote_count - 1);
+		dispatch(toggleIsLiked(movie));
 
-		// movies.splice(index, 1, movie);
+		movie.isLiked
+			? (movie.vote_count = movie.vote_count + 1)
+			: (movie.vote_count = movie.vote_count - 1);
+
+		movies.splice(index, 1, movie);
 	};
 	useEffect(() => {
 		dispatch(getMovies());

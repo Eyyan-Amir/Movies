@@ -18,10 +18,8 @@ function MovieDetail() {
 
 	const dispatch = useDispatch();
 
-	const { MovieDetail, comment } = useSelector(
-		(state) =>
-			//@ts-ignore
-			state.moviesReducer
+	const { MovieDetail, comment }: any = useSelector<any>(
+		(state) => state.moviesReducer
 	);
 
 	const validationSchema = yup.object({
