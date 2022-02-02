@@ -1,3 +1,4 @@
+import React from "react";
 import { Form, Formik, Field, ErrorMessage } from "formik";
 import { useEffect } from "react";
 import { Link } from "react-router-dom";
@@ -16,13 +17,11 @@ export default function Registration() {
 	const { users } = useSelector(
 		(state) =>
 			//@ts-ignore
-			state.movie
+			state.rootReducer.movie
 	);
 
 	const dispatch = useDispatch();
-
 	const initialValue: RegistrationType = { name: "", email: "", password: "" };
-
 	let validationSchema = yup.object({
 		name: yup.string().required("Required"),
 		email: yup.string().email("invalid").required("Required"),

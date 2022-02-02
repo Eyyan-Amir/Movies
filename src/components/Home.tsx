@@ -1,3 +1,4 @@
+import React from "react";
 import { SearchBar } from "./SearchBar";
 import MoviesList from "./common/MoviesList";
 import "../app.scss";

@@ -1,9 +1,9 @@
+import React from "react";
 import { useEffect } from "react";
 import { Link, useParams } from "react-router-dom";
 import { SearchBar } from "../SearchBar";
-import { useDispatch } from "react-redux";
-import { connect } from "react-redux";
-import { fetchSearchMovie } from "../../redux/action/action";
+import { useSelector, useDispatch } from "react-redux";
+import { getSearchMovies } from "../../redux/reducer/reducer";
 
 interface SearchResultType {
 	backdrop_path: string;
@@ -15,13 +15,17 @@ interface SearchResultType {
 	overview: string;
 }
 
-function SearchResult({ items }: any) {
+function SearchResult({ movies }: any) {
 	const { name } = useParams();
-
 	const dispatch = useDispatch();
+	const { searchResult } = useSelector(
+		(state) =>
+			//@ts-ignore
+			state.moviesReducer
+	);
 
 	useEffect(() => {
-		dispatch(fetchSearchMovie(name));
+		dispatch(getSearchMovies(name));
 	}, [name]);
 
 	return (
@@ -30,8 +34,8 @@ function SearchResult({ items }: any) {
 			<Link to={"/home"}>back</Link>
 
 			<div className="search-movies">
-				{items.searchResult.length ? (
-					items.searchResult.map((movie: SearchResultType) => (
+				{searchResult.length ? (
+					searchResult.map((movie: SearchResultType) => (
 						<div className="search-movies-item" key={movie.id}>
 							<div className="search-movies-item-image">
 								<img
@@ -65,7 +69,9 @@ function SearchResult({ items }: any) {
 				) : (
 					<h2 className="text-center">
 						I tried so hard and got so far but in the end{" "}
-						<h1>Movie not found :(</h1>
+						<span className="d-block">
+							<b>Movie not found :(</b>
+						</span>
 					</h2>
 				)}
 			</div>
@@ -73,10 +79,4 @@ function SearchResult({ items }: any) {
 	);
 }
 
-const mapStateToProps = (state: any) => {
-	return {
-		items: state.movie,
-	};
-};
-
-export default connect(mapStateToProps)(SearchResult);
+export default SearchResult;

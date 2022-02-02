@@ -1,12 +1,15 @@
+import React from "react";
 import { useEffect } from "react";
 import { PrevArrow } from "../../components/slider/PrevArrow";
 import { NextArrow } from "../../components/slider/NextArrow";
-import axios from "axios";
 import MoviesSlider from "./MoviesSlider";
 import GenresSlider from "./GenresSlider";
 import { useSelector, useDispatch } from "react-redux";
-import { connect } from "react-redux";
-import { fetchMovies, fetchGenresMovies } from "../../redux/action/action";
+import {
+	getMovies,
+	getGenresMovies,
+	toggleIsLiked,
+} from "../../redux/reducer/reducer";
 
 interface MovieType {
 	backdrop_path: string;
@@ -18,24 +21,25 @@ interface MovieType {
 	isLiked: boolean;
 }
 
-interface GenreType {
-	movies: object[];
-	id: number;
-	name: string;
-}
-
-function MoviesList({ items }: any) {
-	//@ts-ignore
-	const { movies } = useSelector(
-		//@ts-ignore
-		(state) => state.movie
-	);
+function MoviesList() {
 	const dispatch = useDispatch();
 
+	const { movies, genreMovies } = useSelector(
+		(state) =>
+			//@ts-ignore
+			state.moviesReducer
+	);
+
 	const handleLikeClick = (item: MovieType) => {
+		let newMovies = [...movies];
 		let index = movies.indexOf(item);
-		let movie = movies[index];
+		let movie = [...movies][index];
+
 		movie.isLiked = !movie.isLiked;
+		movie.isLiked = !movie.isLiked;
+		console.log(movie.isLiked);
+
+		dispatch(toggleIsLiked(movie));
 
 		movie.isLiked
 			? (movie.vote_count = movie.vote_count + 1)
@@ -45,12 +49,12 @@ function MoviesList({ items }: any) {
 	};
 
 	useEffect(() => {
-		dispatch(fetchMovies());
+		dispatch(getMovies());
 	}, []);
 
 	useEffect(() => {
-		dispatch(fetchGenresMovies(movies));
-	}, [items]);
+		dispatch(getGenresMovies({ movies }));
+	}, [movies]);
 
 	return (
 		<>
@@ -64,21 +68,13 @@ function MoviesList({ items }: any) {
 
 				<GenresSlider
 					sliderSettings={{ ...sliderSettings }}
-					movies={items.genreMovies}
+					movies={genreMovies}
 					handleLikeClick={handleLikeClick}
 				/>
 			</div>
 		</>
 	);
 }
-
-const mapStateToProps = (state: any) => {
-	return {
-		items: state.movie,
-	};
-};
-
-export default connect(mapStateToProps)(MoviesList);
 
 const sliderSettings = {
 	dots: false,
@@ -89,3 +85,5 @@ const sliderSettings = {
 	nextArrow: <NextArrow className="slick-arrow slick-next slick-disabled" />,
 	prevArrow: <PrevArrow className="slick-prev slick-next slick-disabled" />,
 };
+
+export default MoviesList;

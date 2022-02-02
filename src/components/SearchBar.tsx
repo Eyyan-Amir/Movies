@@ -1,3 +1,4 @@
+import React from "react";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import { Link, useNavigate } from "react-router-dom";
 import TextError from "./common/ErrorText";
@@ -9,11 +10,9 @@ interface Searchtype {
 
 export const SearchBar = () => {
 	const navigate = useNavigate();
-
 	const validationSchema = yup.object({
 		search: yup.string().required("required!"),
 	});
-
 	const initialValue = { search: "" };
 
 	const handleSearch = (
