@@ -9,11 +9,9 @@ interface Searchtype {
 
 export const SearchBar = () => {
 	const navigate = useNavigate();
-
 	const validationSchema = yup.object({
 		search: yup.string().required("required!"),
 	});
-
 	const initialValue = { search: "" };
 
 	const handleSearch = (

@@ -13,9 +13,7 @@ interface CommentType {
 
 function MovieDetail() {
 	const initialValue: CommentType = { comment: "" };
-
 	const { id } = useParams();
-
 	const dispatch = useDispatch();
 
 	const { MovieDetail, comment }: any = useSelector<any>(
@@ -25,8 +23,8 @@ function MovieDetail() {
 	const validationSchema = yup.object({
 		comment: yup
 			.string()
-			.required("required")
-			.min(3, "minimum enter 3 letters"),
+			.required("commrnt field required")
+			.min(3, "enter minimum 3 letters"),
 	});
 
 	const handleSubmit = (

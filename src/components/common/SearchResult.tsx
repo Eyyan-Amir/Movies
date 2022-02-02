@@ -16,9 +16,7 @@ interface SearchResultType {
 
 function SearchResult({ movies }: any) {
 	const { name } = useParams();
-
 	const dispatch = useDispatch();
-
 	const { searchResult } = useSelector(
 		(state) =>
 			//@ts-ignore

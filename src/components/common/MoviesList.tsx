@@ -29,12 +29,9 @@ function MoviesList() {
 			state.moviesReducer
 	);
 
-	// console.log("genreMovies", genreMovies);
-
 	const handleLikeClick = (item: MovieType) => {
 		let newMovies = [...movies];
 		let index = movies.indexOf(item);
-		// console.log(index);
 		let movie = [...movies][index];
 
 		movie.isLiked = !movie.isLiked;
@@ -54,6 +51,7 @@ function MoviesList() {
 
 		movies.splice(index, 1, movie);
 	};
+
 	useEffect(() => {
 		dispatch(getMovies());
 	}, []);

@@ -20,9 +20,7 @@ export default function Registration() {
 	);
 
 	const dispatch = useDispatch();
-
 	const initialValue: RegistrationType = { name: "", email: "", password: "" };
-
 	let validationSchema = yup.object({
 		name: yup.string().required("Required"),
 		email: yup.string().email("invalid").required("Required"),
