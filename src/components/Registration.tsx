@@ -5,7 +5,7 @@ import { Link } from "react-router-dom";
 import * as yup from "yup";
 import ErrorText from "./common/ErrorText";
 import { useSelector, useDispatch } from "react-redux";
-import { setUser } from "../redux/action/action";
+import { setUser } from "../redux/reducer/reducer";
 
 interface RegistrationType {
 	name: string;
@@ -17,7 +17,7 @@ export default function Registration() {
 	const { users } = useSelector(
 		(state) =>
 			//@ts-ignore
-			state.rootReducer.movie
+			state.moviesReducer
 	);
 
 	const dispatch = useDispatch();
@@ -38,6 +38,7 @@ export default function Registration() {
 	) => {
 		setSubmitting(false);
 		resetForm();
+		console.log(values);
 		dispatch(setUser([...users, values]));
 	};
 

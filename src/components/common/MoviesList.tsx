@@ -1,4 +1,3 @@
-import React from "react";
 import { useEffect } from "react";
 import { PrevArrow } from "../../components/slider/PrevArrow";
 import { NextArrow } from "../../components/slider/NextArrow";
@@ -20,14 +19,20 @@ interface MovieType {
 	vote_count: number;
 	isLiked: boolean;
 }
+interface StateType {
+	moviesReducer: ReducerType;
+}
+
+interface ReducerType {
+	movies: any;
+	genreMovies: any;
+}
 
 function MoviesList() {
 	const dispatch = useDispatch();
 
-	const { movies, genreMovies } = useSelector(
-		(state) =>
-			//@ts-ignore
-			state.moviesReducer
+	const { movies, genreMovies }: any = useSelector<StateType>(
+		(state) => state.moviesReducer
 	);
 
 	const handleLikeClick = (item: MovieType) => {
@@ -39,13 +44,12 @@ function MoviesList() {
 		movie.isLiked = !movie.isLiked;
 		console.log(movie.isLiked);
 
-		dispatch(toggleIsLiked(movie));
-
 		movie.isLiked
 			? (movie.vote_count = movie.vote_count + 1)
 			: (movie.vote_count = movie.vote_count - 1);
 
 		movies.splice(index, 1, movie);
+		dispatch(toggleIsLiked(movies));
 	};
 
 	useEffect(() => {

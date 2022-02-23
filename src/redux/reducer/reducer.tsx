@@ -1,4 +1,3 @@
-import React from "react";
 import { createAsyncThunk, PayloadAction, createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
 

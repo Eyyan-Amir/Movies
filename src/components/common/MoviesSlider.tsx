@@ -1,4 +1,3 @@
-import React from "react";
 import { Link } from "react-router-dom";
 import Slider from "react-slick";
 
@@ -8,19 +7,39 @@ interface MoviesSliderProps {
 	movies: object[];
 }
 
+interface MoviesType {
+	backdropPath: string;
+	posterPath: string;
+	title: string;
+	id: number;
+	isLiked: boolean;
+	voteCount: number;
+}
+
 export default function MoviesSlider({
 	sliderSettings,
 	handleLikeClick,
 	movies,
 }: MoviesSliderProps) {
+	let latestMovies = movies?.map((movie: any) => {
+		let newMovies: any = {};
+		newMovies.backdropPath = movie.backdrop_path;
+		newMovies.posterPath = movie.poster_path;
+		newMovies.title = movie.title;
+		newMovies.id = movie.id;
+		newMovies.isLiked = movie.isLiked;
+		newMovies.voteCount = movie.vote_count;
+		return newMovies;
+	});
+
 	return (
 		<div>
 			<Slider {...sliderSettings}>
-				{movies?.map((movie: any, i: number) => (
+				{latestMovies?.map((movie: MoviesType, i: number) => (
 					<div className="list-item" key={i}>
 						<div className="list-item-image">
 							<img
-								src={`${process.env.REACT_APP_MOVIES_IMG}${movie.backdrop_path}`}
+								src={`${process.env.REACT_APP_MOVIES_IMG}${movie.backdropPath}`}
 								alt=""
 								className="img-fluid"
 							/>
@@ -28,7 +47,7 @@ export default function MoviesSlider({
 						<div className="text-wrapper">
 							<div className="list-item-logo">
 								<img
-									src={`${process.env.REACT_APP_MOVIES_IMG}${movie.poster_path}`}
+									src={`${process.env.REACT_APP_MOVIES_IMG}${movie.posterPath}`}
 									alt=""
 									className="img-fluid"
 								/>
@@ -43,7 +62,7 @@ export default function MoviesSlider({
 											handleLikeClick(movie);
 										}}
 									>
-										<span className="vote">{movie.vote_count}</span>
+										<span className="vote">{movie.voteCount}</span>
 									</i>
 								</span>
 							</div>

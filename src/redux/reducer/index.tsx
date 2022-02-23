@@ -1,5 +1,3 @@
-import React from "react";
-
 import moviesReducer from "./reducer";
 import { combineReducers } from "redux";
 

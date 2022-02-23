@@ -1,5 +1,3 @@
-import { createAction } from "@reduxjs/toolkit";
-
 import {
 	SET_MOVIE,
 	SET_GENRE,
@@ -11,47 +9,56 @@ import {
 
 import axios from "axios";
 
-export const setMovies = createAction(SET_MOVIE, (moviesList: any) => {
+export const setMovies = (moviesList: any) => {
 	return {
+		type: SET_MOVIE,
 		payload: moviesList,
 	};
-});
+};
 
-export const setGenre = createAction(SET_GENRE, (moviesList: any) => {
+export const setGenre = (genreMoviesList: any) => {
 	return {
-		payload: moviesList,
+		type: SET_GENRE,
+		payload: genreMoviesList,
 	};
-});
+};
 
-export const setSearchResult = createAction(
-	SET_SEARCH_Result,
-	(MoviesList: any) => {
-		return {
-			payload: MoviesList,
-		};
-	}
-);
-
-export const setMovieDetail = createAction(
-	SET_MOVIE_DETAILS,
-	(MovieDetail: any) => {
-		return {
-			payload: MovieDetail,
-		};
-	}
-);
-
-export const addComment = createAction(ADD_COMMENT, (comment: object) => {
+export const setSearchResult = (searchResult: any) => {
 	return {
+		type: SET_SEARCH_Result,
+		payload: searchResult,
+	};
+};
+
+export const setMovieDetail = (MovieDetail: any) => {
+	return {
+		type: SET_MOVIE_DETAILS,
+		payload: MovieDetail,
+	};
+};
+
+export const addComment = (comment: object) => {
+	return {
+		type: ADD_COMMENT,
 		payload: comment,
 	};
-});
+};
 
-export const setUser = createAction(SET_USER, (user: any) => {
+export const setUser = (user: any) => {
 	return {
+		type: SET_USER,
 		payload: user,
 	};
-});
+};
+
+export const fetchSearchMovie = (movie: any) => {
+	return (dispatch: any) => {
+		axios
+			.get(`${process.env.REACT_APP_SEARCH_MOVIE}${movie}`)
+			.then((response) => dispatch(setSearchResult(response.data.results)))
+			.catch((err) => console.log(err));
+	};
+};
 
 export const fetchMovies = () => {
 	return (dispatch: any) => {
@@ -83,14 +90,5 @@ export const fetchGenresMovies = (movies: any) => {
 			.catch((errors) => {
 				console.error(errors);
 			});
-	};
-};
-
-export const fetchSearchMovie = (movie: any) => {
-	return (dispatch: any) => {
-		axios
-			.get(`${process.env.REACT_APP_SEARCH_MOVIE}${movie}`)
-			.then((response) => dispatch(setSearchResult(response.data.results)))
-			.catch((err) => console.log(err));
 	};
 };
